@@ -10,7 +10,7 @@ public interface FilmService {
 
         Optional<Film> findById(Long id);
         List<Film> findByTitle(String title);
-        List<Film> findByYear(Integer year);
+        List<Film> findByReleaseYear(Integer year);
         void saveOrUpdate(Film film);
         void delete(Long id);
     }

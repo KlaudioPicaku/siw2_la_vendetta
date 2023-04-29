@@ -1,8 +1,10 @@
-package com.siw.uniroma3.it.siw_lavendetta.services;
+package com.siw.uniroma3.it.siw_lavendetta.impl;
 
 import com.siw.uniroma3.it.siw_lavendetta.models.Film;
 import com.siw.uniroma3.it.siw_lavendetta.repositories.FilmRepository;
+import com.siw.uniroma3.it.siw_lavendetta.services.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import java.util.Optional;
 
 @Service
 public class FilmServiceImpl implements FilmService {
+
 
     @Autowired
     private FilmRepository filmRepository;
@@ -31,8 +34,8 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public List<Film> findByYear(Integer year) {
-        return filmRepository.findByYear(year);
+    public List<Film> findByReleaseYear(Integer year) {
+        return filmRepository.findByReleaseYear(year);
     }
 
     @Override
