@@ -33,6 +33,9 @@ public class User implements UserDetails {
     @Column(name = "last_name", nullable = false, length = 20)
     private String lastName;
 
+    @Column(name="is_superuser")
+    private boolean isSuperuser;
+
     @Column (name="foto",nullable = true)
     private String image;
 
@@ -125,6 +128,8 @@ public class User implements UserDetails {
     public String getImage() {
         return image;
     }
+
+    public Boolean getRole(){ return isSuperuser; }
 
     public void setImage(String image) {
         this.image = image;
