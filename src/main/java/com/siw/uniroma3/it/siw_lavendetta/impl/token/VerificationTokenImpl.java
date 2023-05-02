@@ -12,6 +12,16 @@ public class VerificationTokenImpl implements VerificationTokenService {
 
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
+
+    @Override
+    public VerificationToken findByToken(String token) {
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+        if (verificationToken.isValid()){
+            return verificationToken;
+        }
+        return  null;
+    }
+
     @Override
     public VerificationToken findByUser(User user) {
         return verificationTokenRepository.getByUser(user);
@@ -27,4 +37,5 @@ public class VerificationTokenImpl implements VerificationTokenService {
         verificationTokenRepository.deleteById(id);
 
     }
+
 }

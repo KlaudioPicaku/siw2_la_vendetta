@@ -15,7 +15,7 @@ public class VerificationToken {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    @Column(nullable = false)
     private String token;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
@@ -23,6 +23,15 @@ public class VerificationToken {
     private User user;
 
     private Date expiryDate;
+    public VerificationToken(){
+
+    }
+    public VerificationToken(String token, User user){
+        super();
+        this.token=token;
+        this.user=user;
+        this.expiryDate=calculateExpiryDate(1440);
+    }
 
     private Date calculateExpiryDate(int expiryTimeInMinutes) {
         Calendar cal = Calendar.getInstance();
@@ -38,7 +47,7 @@ public class VerificationToken {
         VerificationToken that = (VerificationToken) o;
         return Objects.equals(id, that.id) && Objects.equals(token, that.token) && Objects.equals(user, that.user);
     }
-
+    // standard constructors, getters and setters
     @Override
     public int hashCode() {
         return Objects.hash(id, token, user);
@@ -56,8 +65,13 @@ public class VerificationToken {
         return expiryDate;
     }
 
+    public String getToken(){return this.token;}
+
     public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
-// standard constructors, getters and setters
+    public boolean isValid() {
+        Date currentDate = new Date();
+        return currentDate.before(expiryDate);
+    }
 }

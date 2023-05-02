@@ -10,10 +10,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
-@EnableJpaRepositories("com.siw.uniroma3.it.siw_lavendetta.repositories")
+//@EnableJpaRepositories("com.siw.uniroma3.it.siw_lavendetta.repositories")
 @EntityScan("com.siw.uniroma3.it.siw_lavendetta.models")
 @ComponentScan(basePackages = "com.siw.uniroma3.it.siw_lavendetta")
-@SpringBootApplication(exclude={ SecurityAutoConfiguration.class})
+@SpringBootApplication()
 
 public class Siw2LaVendettaApplication {
 	public static void main(String[] args) {

@@ -8,16 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 public class UserDto {
-    public UserDto (){
 
-    }
-    public UserDto(String username, String email, String password, String firstName, String lastName) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
 
     @NotEmpty
     private String username;
@@ -34,9 +25,21 @@ public class UserDto {
     @NotEmpty
     private String lastName;
 
+    public UserDto (){
+
+    }
+    public UserDto(String username, String email, String password, String firstName, String lastName) {
+        super();
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public void setUsername(String username) {
@@ -75,4 +78,14 @@ public class UserDto {
         this.lastName = lastName;
     }
 
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }

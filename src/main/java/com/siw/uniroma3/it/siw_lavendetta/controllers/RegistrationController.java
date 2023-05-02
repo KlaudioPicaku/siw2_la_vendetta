@@ -4,9 +4,12 @@ import com.siw.uniroma3.it.siw_lavendetta.dto.UserDto;
 import com.siw.uniroma3.it.siw_lavendetta.impl.UserDetailServiceImpl;
 import com.siw.uniroma3.it.siw_lavendetta.impl.UserServiceImpl;
 import com.siw.uniroma3.it.siw_lavendetta.models.User;
+import com.siw.uniroma3.it.siw_lavendetta.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,7 +25,8 @@ import org.slf4j.LoggerFactory;
 public class RegistrationController {
 
     @Autowired
-    private UserServiceImpl userService;
+    @Qualifier("userServiceImpl")
+    private UserService userService;
 
     @Autowired
     private UserDetailServiceImpl userDetailsService;
@@ -39,19 +43,33 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@Valid @ModelAttribute("user") UserDto user, BindingResult result) {
+    public String registerUser(@Valid @ModelAttribute("userDto") UserDto user, BindingResult result) {
+        System.out.println(user.toString());
         if (result.hasErrors()) {
             return "register";
         }
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-        if (userDetails != null) {
+        UserDetails userDetails=null;
+        if (userDetailsService!=null){
+            System.out.println("is not null");
+        }
+        try {
+            userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+            // other code here
             result.rejectValue("username", "error.user", "Username is already in use");
             return "register";
-        }
+        } catch (UsernameNotFoundException ex) {}
         userDetails=userDetailsService.loadByEmail(user.getEmail());
-        if (userDetails != null) {
+        if( userDetails!=null ){
             result.rejectValue("email", "error.user", "Email is already in use");
             return "register";
+        }
+
+        if(userService!=null){
+
+            System.out.println("vero");
+        }
+        else{
+            System.out.println("null ");
         }
 
         userService.saveUser(user);
