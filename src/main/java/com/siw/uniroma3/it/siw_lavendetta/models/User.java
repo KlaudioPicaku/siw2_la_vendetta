@@ -1,10 +1,14 @@
 package com.siw.uniroma3.it.siw_lavendetta.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -18,23 +22,32 @@ public class User implements UserDetails {
     @Id
     private Long id;
 
-    @Column(name = "username", nullable = false, length = 20)
+    @Column( name = "username", nullable = false, length = 20)
+    @NotBlank(message = "Username is required")
     private String username;
 
     @Column(nullable = false, unique = true, length = 45)
+    @NotBlank(message = "email is required")
     private String email;
 
     @Column(nullable = false, length = 64)
+    @NotEmpty
+    @Size(min=8)
     private String password;
 
     @Column(name = "first_name", nullable = false, length = 20)
+    @NotBlank(message = "First Name is required")
     private String firstName;
 
     @Column(name = "last_name", nullable = false, length = 20)
+    @NotBlank(message = "Last Name is required")
     private String lastName;
 
     @Column(name="is_superuser")
     private boolean isSuperuser;
+
+    @Column(name = "enabled")
+    private boolean enabled;
 
     @Column (name="foto",nullable = true)
     private String image;
@@ -48,9 +61,15 @@ public class User implements UserDetails {
         this.firstName = firstName;
         this.lastName = lastName;
         this.image = image;
+        this.enabled=false;
+        this.isSuperuser=false;
     }
 
     // getters and setters
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public Long getId() {
         return id;
@@ -106,8 +125,11 @@ public class User implements UserDetails {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(password);
+        this.password = hashedPassword;
     }
+
 
     public String getFirstName() {
         return firstName;
@@ -164,4 +186,5 @@ public class User implements UserDetails {
                 ", image='" + image + '\'' +
                 '}';
     }
+
 }

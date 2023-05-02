@@ -6,12 +6,14 @@
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
 </head>
-<body>
+<body class="bg-dark">
 <header th:replace="fragments/header.html :: header"></header>
 <div class="container mt-3" >
     <!-- Content goes here -->
     <div th:replace="${contentTemplate} :: content"></div>
 </div>
-<footer th:replace="fragments/footer.html :: footer"></footer>
+<footer th:replace="fragments/footer.html :: footer">
+
+</footer>
 </body>
 </html>
