@@ -3,6 +3,7 @@ package com.siw.uniroma3.it.siw_lavendetta.impl;
 import com.siw.uniroma3.it.siw_lavendetta.models.User;
 import com.siw.uniroma3.it.siw_lavendetta.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,8 +22,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadByEmail(String email){
         return userRepository.findByEmail(email);
     }
+
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException,DisabledException{
         User user= userRepository.findByUsername(username);
         if (user == null){
             throw new UsernameNotFoundException("Invalid username or password");
@@ -33,6 +35,12 @@ public class UserDetailServiceImpl implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority("ADMIN"));
         }
 
+        if (!user.isEnabled()) {
+            System.out.println("USER IS NOT ENABLED ! S K I P Z !");
+            throw new DisabledException("Account is not enabled");
+        }
+
         return  new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),authorities);
     }
+
 }

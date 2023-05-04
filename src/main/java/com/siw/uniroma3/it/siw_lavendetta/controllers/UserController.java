@@ -29,6 +29,8 @@ public class UserController {
             User user = verificationTokenLocal.getUser();
             user.setEnabled(true);
             userService.save(user);
+            verificationTokenLocal.burnToken();
+            verificationToken.saveOrUpdate(verificationTokenLocal);
             // Handle successful verification
             return "redirect:/activation/success?token=" + token;
         }

@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
     @Override
-    public void saveUser(UserDto user){
+    public void saveUser(@org.jetbrains.annotations.NotNull UserDto user){
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         User newUser=new User(user.getUsername(),user.getEmail(),encodedPassword,user.getFirstName(),user.getLastName(), GUIconstants.DEFAULT_PROFILE_PICTURE);
         System.out.println(newUser.toString());
@@ -67,4 +67,15 @@ public class UserServiceImpl implements UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+    public boolean passwordMatch(User user, String inputPassword){
+        if (user!=null){
+            if(!inputPassword.isEmpty()){
+                return passwordEncoder.matches(user.getPassword(),inputPassword);
+            }
+        }
+        return false;
+    }
+
+
 }

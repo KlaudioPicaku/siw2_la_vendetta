@@ -21,6 +21,8 @@ public class VerificationToken {
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
+    @Column(nullable = false)
+    private int burned;
 
     private Date expiryDate;
     public VerificationToken(){
@@ -31,6 +33,7 @@ public class VerificationToken {
         this.token=token;
         this.user=user;
         this.expiryDate=calculateExpiryDate(1440);
+        this.burned=0;
     }
 
     private Date calculateExpiryDate(int expiryTimeInMinutes) {
@@ -73,5 +76,8 @@ public class VerificationToken {
     public boolean isValid() {
         Date currentDate = new Date();
         return currentDate.before(expiryDate);
+    }
+    public void burnToken(){
+        this.burned=1;
     }
 }
