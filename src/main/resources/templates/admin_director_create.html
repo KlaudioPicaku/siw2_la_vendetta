@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="/fragments/base :: html" th:with="contentTemplate='admin_director_create'">
+<div class="container mt-3" th:fragment="content">
+    <div class="mt-4 mb-4">
+        <h2 style="color:white">Admin Panel/Director's List/Create </h2>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <img src="/static/images/movice_director.webp" class="slideRight ml-2" width="350" height="350">
+        </div>
+        <div class="fadeIn col-md-6">
+            <form th:action="@{/admin/directors/create}" method="post" enctype="multipart/form-data">
+                <label for="director_first_name" style="color:white">First Name:</label>
+                <input type="text" id="director_first_name" class="form-control" th:field="*{director.firstName}" required />
+                <div th:if="${#fields.hasErrors('director.firstName')}">
+                    <p class="error-message" th:each="error : ${#fields.errors('director.firstName')}" th:text="${error}"></p>
+                </div>
+                <label for="director_last_name" style="color:white">Last Name:</label>
+                <input type="text" id="director_last_name" class="form-control" th:field="*{director.lastName}" required />
+                <div th:if="${#fields.hasErrors('director.lastName')}">
+                    <p class="error-message" th:each="error : ${#fields.errors('director.lastName')}" th:text="${error}"></p>
+                </div>
+                <label for="director_birthDate" style="color:white">Date Of birth:</label>
+                <input type="date" id="director_birthDate" name="birthDate" class="form-control date-picker" th:field="*{director.birthDate}"  th:format="yyyy-MM-dd" required />
+                <div th:if="${#fields.hasErrors('director.birthDate')}">
+                    <p class="error-message" th:each="error : ${#fields.errors('director.birthDate')}" th:text="${error}"></p>
+                </div>
+                <label for="director_deathDate" style="color:white">Date Of Death:(Optional)</label>
+                <input type="date" id="director_deathDate" name="deathDate" class="form-control date-picker" th:field="*{director.deathDate}" th:format="yyyy-MM-dd" />
+
+                <label for="image" style="color:white">Image:</label>
+                <input type="file" id="image" class="form-control-file" th:field="*{director.image}" accept="image/*" />
+                <div id="selected-images"></div>
+                <div th:if="${#fields.hasErrors('director.image')}">
+                    <p class="error-message" th:each="error : ${#fields.errors('director.image')}" th:text="${error}"></p>
+                </div>
+                <button class="btn btn-primary mt-4" type="submit">Create Director</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+</html>

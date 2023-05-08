@@ -1,10 +1,13 @@
 package com.siw.uniroma3.it.siw_lavendetta.models;
 
+import com.siw.uniroma3.it.siw_lavendetta.constants.StaticURLs;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -24,10 +27,12 @@ public class Director {
     private String lastName;
 
     @Column(name = "birth_date", nullable = false)
-    private LocalDate birthDate;
+    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    private String birthDate;
 
     @Column(name = "death_date", nullable = true)
-    private LocalDate deathDate;
+    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    private String deathDate;
 
     @Column(name = "foto",nullable = true)
     private String image;
@@ -39,14 +44,14 @@ public class Director {
     public Director(){
 
     }
-    public Director(Long id, String firstName, String lastName, LocalDate birthDate, LocalDate deathDate, String image, Film film) {
-        this.id = id;
+    public Director( String firstName, String lastName, String birthDate, String deathDate, String image) {
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.deathDate = deathDate;
         this.image = image;
-        this.films.add(film);
+        this.films=new HashSet<>();
     }
 
     @Override
@@ -54,7 +59,7 @@ public class Director {
         if (this == o) return true;
         if (!(o instanceof Director)) return false;
         Director director = (Director) o;
-        return Objects.equals(id, director.id) && Objects.equals(firstName, director.firstName) && Objects.equals(lastName, director.lastName);
+        return Objects.equals(id, director.id) && Objects.equals(firstName, director.firstName) && Objects.equals(lastName, director.lastName) && Objects.equals(birthDate, director.birthDate);
     }
 
     @Override
@@ -86,19 +91,20 @@ public class Director {
         this.lastName = lastName;
     }
 
-    public LocalDate getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthDate(String birthDate) {
+
+        this.birthDate =  birthDate;
     }
 
-    public LocalDate getDeathDate() {
+    public String getDeathDate() {
         return deathDate;
     }
 
-    public void setDeathDate(LocalDate deathDate) {
+    public void setDeathDate(String deathDate) {
         this.deathDate = deathDate;
     }
 
@@ -117,4 +123,11 @@ public class Director {
     public void setFilms(Set<Film> films) {
         this.films = films;
     }
+
+    public String getAbsoluteUrl(){ return StaticURLs.DIRECTOR_DETAIL_URL+this.getId();}
+
+    public String getFullName(){
+        return this.firstName +" "+ this.lastName;
+    }
+
 }

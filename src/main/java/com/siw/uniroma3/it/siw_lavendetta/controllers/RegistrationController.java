@@ -44,7 +44,7 @@ public class RegistrationController {
 
     @PostMapping("/register")
     public String registerUser(@Valid @ModelAttribute("userDto") UserDto user, BindingResult result) {
-        System.out.println(user.toString());
+//        System.out.println(user.toString());
         if (result.hasErrors()) {
             return "register";
         }
@@ -64,13 +64,13 @@ public class RegistrationController {
             return "register";
         }
 
-        if(userService!=null){
-
-            System.out.println("vero");
-        }
-        else{
-            System.out.println("null ");
-        }
+//        if(userService!=null){
+//
+//            System.out.println("vero");
+//        }
+//        else{
+//            System.out.println("null ");
+//        }
 
         userService.saveUser(user);
         return "/login";

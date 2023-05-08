@@ -33,8 +33,7 @@ public class Review {
     public Review(){
 
     }
-    public Review(Long id, String title, Integer rating, String body, User author, Film film) {
-        this.id = id;
+    public Review( String title, Integer rating, String body, User author, Film film) {
         this.title = title;
         this.rating = rating;
         this.body = body;

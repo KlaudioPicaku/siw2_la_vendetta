@@ -40,8 +40,7 @@ public class Actor {
 
     }
 
-    public Actor(Long id, String firstName, String lastName, LocalDate birthDate, LocalDate deathDate, String image, Film film) {
-        this.id = id;
+    public Actor(String firstName, String lastName, LocalDate birthDate, LocalDate deathDate, String image, Film film) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;

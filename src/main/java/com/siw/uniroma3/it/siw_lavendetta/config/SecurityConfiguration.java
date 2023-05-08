@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 @Configuration
 @EnableWebSecurity
@@ -19,6 +20,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailServiceImpl userService;
+
+    @Bean
+    public SpringSecurityDialect springSecurityDialect() {
+        return new SpringSecurityDialect();
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -33,26 +39,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return auth;
     }
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.authenticationProvider(authenticationProvider());
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService);
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider());
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(
                         "/registration**"
-                        ).permitAll()
+                ).permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/login").permitAll()
-                    .loginProcessingUrl("/login")
-                    .defaultSuccessUrl("/", true)
-                    .successHandler(new CustomAuthenticationSuccessHandler())
-                    .failureUrl("/login?error=true")
-                    .usernameParameter("username").passwordParameter("password")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/", true)
+                .successHandler(new CustomAuthenticationSuccessHandler())
+                .failureUrl("/login?error=true")
+                .usernameParameter("username").passwordParameter("password")
                 .and()
                 .logout()
                 .invalidateHttpSession(true)
@@ -61,6 +65,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login?logout")
                 .permitAll();
     }
-
-
 }

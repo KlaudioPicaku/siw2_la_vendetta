@@ -8,4 +8,10 @@ public class StaticURLs {
     public static final int HOST_PORT = 8080;
 
     public static final String HOST_URL = HOST_PROTOCOL + (HOST_PROTOCOL.isEmpty() ? "" : SPECIAL_ADDON) + HOST_DOMAIN + (HOST_PORT == 80 ? "" : ":" + HOST_PORT);
+
+
+    public static final String FILM_DETAIL_URL="/film/detail?id=";
+
+
+    public static final String DIRECTOR_DETAIL_URL="/directors/detail?id=";
 }

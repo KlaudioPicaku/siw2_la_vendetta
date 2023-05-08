@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="/fragments/base :: html" th:with="contentTemplate='admin_directors_list'" xmlns="http://www.w3.org/1999/html" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+<div class="container mt-3" th:fragment="content">
+  <div class="mt-4 mb-4">
+    <h2 style="color:white">Admin Panel/Director's List </h2>
+  </div>
+  <table class="table slideDown" style="color:white">
+    <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">Image</th>
+      <th scope="col">Full Name</th>
+      <th scope="col">Born on:</th>
+      <th scope="col">Died On</th>
+      <th scope="col">Films they directed:</th>
+    </tr>
+    <div class="d-flex justify-content-end">
+      <a href="/admin/directors/create" class="fadeIn btn btn-success">Add a Director
+        <i class="material-icons">&#xe145;</i>
+      </a>
+    </div>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(directors)}">
+      <td colspan="6" class="text-center">
+        <div class="alert alert-info" role="alert">
+          <i class="bi bi-info-circle"></i> No Directors to Display
+        </div>
+      </td>
+    </tr>
+    <tr th:each="director: ${directors}">
+      <td th:text="${director.getId()}"></td>
+      <td><img th:src="@{${director.getImage()}}" class="rounded-left mr-2" width="45" height="80" alt="Director Image" /></td>
+      <td th:text="${director.getFullName()}"></td>
+      <td th:text="${director.getBirthDate()}"></td>
+      <td th:text="${director.getDeathDate()}"></td>
+      <td><a th:href="'/films/director?id='+ ${director.getId()}">View Filmography...</a></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

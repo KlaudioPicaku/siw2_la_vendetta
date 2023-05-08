@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" >
 <body>
-<div  th:fragment="profile_dropdown" >
+<div th:fragment="profile_dropdown">
     <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="profile_dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown button
+        <button class="btn btn-outline-success rounded-pill dropdown-toggle" type="button" id="profile_dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img th:src="@{${profile_pic} ?: '/static/images/default_profile_pic.webp'}"  class="rounded-left mr-2" width="28" height="28" alt="Profile Image" />
+            <span class="profile-name ml-2" th:text="${#httpServletRequest.userPrincipal?.name}"></span>
         </button>
-        <div class="dropdown-menu" id="profile_dropdown_menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
+        <div class="dropdown-menu text-align-right" id="profile_dropdown_menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">
+                <i class="bi bi-person-fill text-secondary me-2"></i>Profile
+            </a>
+            <div th:if="${#httpServletRequest != null and #httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+                <div th:if="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+                    <a class="dropdown-item" href="/admin/panel">
+                        <i class="bi bi-speedometer text-secondary me-2"></i>Admin Panel
+                    </a>
+                </div>
+            </div>
+            <a class="dropdown-item" href="/logout">
+                <i class="bi bi-box-arrow-right text-secondary me-2"></i>Logout
+            </a>
         </div>
     </div>
 </div>

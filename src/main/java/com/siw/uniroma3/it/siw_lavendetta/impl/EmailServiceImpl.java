@@ -3,6 +3,7 @@ package com.siw.uniroma3.it.siw_lavendetta.impl;
 import com.siw.uniroma3.it.siw_lavendetta.constants.MailSubjects;
 import com.siw.uniroma3.it.siw_lavendetta.constants.StaticURLs;
 import com.siw.uniroma3.it.siw_lavendetta.services.EmailService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.SimpleMailMessage;
@@ -18,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 @Service
+@Qualifier("emailServiceImpl")
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender emailSender;

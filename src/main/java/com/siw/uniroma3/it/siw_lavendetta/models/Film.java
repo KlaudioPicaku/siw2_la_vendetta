@@ -1,6 +1,8 @@
 package com.siw.uniroma3.it.siw_lavendetta.models;
 
 import javax.persistence.*;
+
+import com.siw.uniroma3.it.siw_lavendetta.constants.StaticURLs;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -34,23 +36,20 @@ public class Film {
             inverseJoinColumns = @JoinColumn(name = "actor_id"))
     private Set<Actor> actors = new HashSet<>();
 
-    @Column(nullable = true)
-    private String image;
+    @OneToMany(mappedBy = "film", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FilmImage> images = new HashSet<>();
 
     @OneToMany(mappedBy = "film")
     private Set<Review> reviews = new HashSet<>();
 
-    // costruttori, getter, setter, equals, hashCode, toString
-
     public Film(){}
 
-    public Film(Long id, String title, int releaseYear, Director director, Actor actor, String image) {
-        this.id = id;
+    public Film(String title, int releaseYear, Director director) {
         this.title = title;
         this.releaseYear = releaseYear;
         this.director = director;
-        this.actors.add(actor);
-        this.image = image;
+        this.actors=new HashSet<>();
+        this.images= new HashSet<>();
     }
 
     @Override
@@ -106,12 +105,22 @@ public class Film {
         this.actors = actors;
     }
 
-    public String getImage() {
-        return image;
+    public Set<FilmImage> getImages() {
+        return images;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImages(Set<FilmImage> images) {
+        this.images = images;
+    }
+
+    public void addImage(FilmImage image) {
+        images.add(image);
+        image.setFilm(this);
+    }
+
+    public void removeImage(FilmImage image) {
+        images.remove(image);
+        image.setFilm(null);
     }
 
     public Set<Review> getReviews() {
@@ -121,4 +130,11 @@ public class Film {
     public void setReviews(Set<Review> reviews) {
         this.reviews = reviews;
     }
+
+    @Override
+    public String toString(){
+        return  this.getTitle()+"("+this.getReleaseYear()+")";
+    }
+
+    public String getAbsoluteUrl(){ return StaticURLs.FILM_DETAIL_URL+this.getId(); }
 }
