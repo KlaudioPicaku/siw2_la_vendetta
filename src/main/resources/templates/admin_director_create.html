@@ -13,26 +13,26 @@
                 <label for="director_first_name" style="color:white">First Name:</label>
                 <input type="text" id="director_first_name" class="form-control" th:field="*{director.firstName}" required />
                 <div th:if="${#fields.hasErrors('director.firstName')}">
-                    <p class="error-message" th:each="error : ${#fields.errors('director.firstName')}" th:text="${error}"></p>
+                    <p class="error-alert"  style="color:red"  th:each="error : ${#fields.errors('director.firstName')}" th:text="${error}"></p>
                 </div>
                 <label for="director_last_name" style="color:white">Last Name:</label>
                 <input type="text" id="director_last_name" class="form-control" th:field="*{director.lastName}" required />
                 <div th:if="${#fields.hasErrors('director.lastName')}">
-                    <p class="error-message" th:each="error : ${#fields.errors('director.lastName')}" th:text="${error}"></p>
+                    <p class="error-alert" style="color:red" th:each="error : ${#fields.errors('director.lastName')}" th:text="${error}"></p>
                 </div>
                 <label for="director_birthDate" style="color:white">Date Of birth:</label>
-                <input type="date" id="director_birthDate" name="birthDate" class="form-control date-picker" th:field="*{director.birthDate}"  th:format="yyyy-MM-dd" required />
+                <input type="date" id="director_birthDate" name="birthDate" class="form-control date-picker" th:field="*{director.birthDate}" required />
                 <div th:if="${#fields.hasErrors('director.birthDate')}">
-                    <p class="error-message" th:each="error : ${#fields.errors('director.birthDate')}" th:text="${error}"></p>
+                    <p class="error-alert"  style="color:red" th:each="error : ${#fields.errors('director.birthDate')}" th:text="${error}"></p>
                 </div>
                 <label for="director_deathDate" style="color:white">Date Of Death:(Optional)</label>
-                <input type="date" id="director_deathDate" name="deathDate" class="form-control date-picker" th:field="*{director.deathDate}" th:format="yyyy-MM-dd" />
+                <input type="date" id="director_deathDate" name="deathDate" class="form-control date-picker" th:field="*{director.deathDate}"  />
 
                 <label for="image" style="color:white">Image:</label>
-                <input type="file" id="image" class="form-control-file" th:field="*{director.image}" accept="image/*" />
+                <input type="file" id="image" class="form-control-file" th:field="*{director.image}" accept="image/*" required/>
                 <div id="selected-images"></div>
                 <div th:if="${#fields.hasErrors('director.image')}">
-                    <p class="error-message" th:each="error : ${#fields.errors('director.image')}" th:text="${error}"></p>
+                    <p class="error-alert"  style="color:red" th:each="error : ${#fields.errors('director.image')}" th:text="${error}"></p>
                 </div>
                 <button class="btn btn-primary mt-4" type="submit">Create Director</button>
             </form>

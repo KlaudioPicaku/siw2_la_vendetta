@@ -31,7 +31,7 @@
     </tr>
     <tr th:each="director: ${directors}">
       <td th:text="${director.getId()}"></td>
-      <td><img th:src="@{${director.getImage()}}" class="rounded-left mr-2" width="45" height="80" alt="Director Image" /></td>
+      <td><img th:src="@{${director.ImagePath}}" class="rounded-left mr-2" width="45" height="70" alt="Director Image" /></td>
       <td th:text="${director.getFullName()}"></td>
       <td th:text="${director.getBirthDate()}"></td>
       <td th:text="${director.getDeathDate()}"></td>

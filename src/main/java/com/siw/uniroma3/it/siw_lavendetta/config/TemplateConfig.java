@@ -2,20 +2,28 @@ package com.siw.uniroma3.it.siw_lavendetta.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Configuration
 @EnableWebMvc
 public class TemplateConfig implements WebMvcConfigurer {
-
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new LocalDateConverter("yyyy-MM-dd"));
+    }
     @Bean
     public ViewResolver viewResolver() {
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
@@ -31,6 +39,17 @@ public class TemplateConfig implements WebMvcConfigurer {
         return engine;
     }
 
+    private void exposeDirectory(String dirName, ResourceHandlerRegistry registry) {
+        Path uploadDir = Paths.get(dirName);
+
+        String uploadPath = uploadDir.toFile().getAbsolutePath();
+
+        if (dirName.startsWith("../")) dirName = dirName.replace("../", "");
+//        registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:/"+ "directors" + "/");
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("file:/home/klaudio/springprojects/images/");
+    }
+
     private ClassLoaderTemplateResolver templateResolver() {
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setPrefix("templates/");
@@ -40,10 +59,12 @@ public class TemplateConfig implements WebMvcConfigurer {
         return resolver;
     }
 
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
+        exposeDirectory("images", registry);
     }
 
 }

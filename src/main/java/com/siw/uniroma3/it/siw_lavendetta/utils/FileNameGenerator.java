@@ -9,10 +9,12 @@ public class FileNameGenerator {
         String className = model.getClass().getSimpleName().toLowerCase();
         String extension = getFileExtension(file.getOriginalFilename());
 
-        return className + "-" + UUID.randomUUID().toString() + extension;
+        String uniqueId = UUID.randomUUID().toString().substring(0, 8);
+
+        return className + "-" + uniqueId;
     }
 
-    private static String getFileExtension(String fileName) {
+    public static String getFileExtension(String fileName) {
         int extensionIndex = fileName.lastIndexOf('.');
         return extensionIndex >= 0 ? fileName.substring(extensionIndex) : "";
     }

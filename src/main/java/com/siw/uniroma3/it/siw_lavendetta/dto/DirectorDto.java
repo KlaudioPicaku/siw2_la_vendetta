@@ -1,5 +1,6 @@
 package com.siw.uniroma3.it.siw_lavendetta.dto;
 
+import org.apache.tomcat.jni.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,11 +12,10 @@ public class DirectorDto {
 
     private String firstName;
     private String lastName;
-    @DateTimeFormat(pattern = "MM-dd-yyyy")
-    private String birthDate;
-    @DateTimeFormat(pattern = "MM-dd-yyyy")
-    @Nullable
-    private String deathDate;
+//    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    private LocalDate birthDate;
+//    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    private LocalDate deathDate;
     private MultipartFile image;
 
     // Constructors, getters, setters
@@ -23,7 +23,7 @@ public class DirectorDto {
     public DirectorDto() {
     }
 
-    public DirectorDto( String firstName, String lastName, String birthDate, String deathDate, MultipartFile image) {
+    public DirectorDto(String firstName, String lastName, LocalDate birthDate, LocalDate deathDate, MultipartFile image) {
         super();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -31,6 +31,7 @@ public class DirectorDto {
         this.deathDate = deathDate;
         this.image = image;
     }
+
 
 
 
@@ -50,20 +51,20 @@ public class DirectorDto {
         this.lastName = lastName;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public LocalDate getBirthDate() {
+        return this.birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
 
         this.birthDate = birthDate;
     }
 
-    public String getDeathDate() {
-        return deathDate;
+    public LocalDate getDeathDate() {
+        return this.deathDate;
     }
 
-    public void setDeathDate(String deathDate) {
+    public void setDeathDate(LocalDate deathDate) {
 
         this.deathDate = deathDate;
     }

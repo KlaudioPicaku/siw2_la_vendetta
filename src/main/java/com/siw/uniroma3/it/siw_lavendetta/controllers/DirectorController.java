@@ -10,6 +10,7 @@ import com.siw.uniroma3.it.siw_lavendetta.services.FilmService;
 import com.siw.uniroma3.it.siw_lavendetta.utils.FileNameGenerator;
 import com.siw.uniroma3.it.siw_lavendetta.utils.FileUploader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,8 @@ import java.util.Iterator;
 import java.util.List;
 @Controller
 public class DirectorController {
+    @Autowired
+    private Environment environment;
 
     private DirectorService directorService;
 
@@ -66,7 +69,7 @@ public class DirectorController {
     @PostMapping("/admin/directors/create")
     public String directorCreate(@Valid @ModelAttribute("director") DirectorDto directorDto, BindingResult result){
         System.out.println("POST ESEGUITA!");
-        directorDto.setBirthDate("2023-05-08");
+//        directorDto.setBirthDate("2023-05-08");
         System.out.println(directorDto.toString());
         System.out.println(result);
         if (result.hasErrors()) {
@@ -74,28 +77,36 @@ public class DirectorController {
         }
 
         MultipartFile file =directorDto.getImage();
-        String filename=FileNameGenerator.generateFileName(directorDto,directorDto.getImage());
-        String imageLocation=DefaultSaveLocations.DEFAULT_DIRECTORS_IMAGE_SAVE+filename;
-        Director localDirector=new Director(directorDto.getFirstName(),directorDto.getLastName(),directorDto.getBirthDate(),directorDto.getDeathDate(), imageLocation);
-        List<Director> directors = new ArrayList<>(directorRepository.findByFirstNameContainingOrLastNameContaining(directorDto.getFirstName(), directorDto.getLastName()));
+        String fileExtension=FileNameGenerator.getFileExtension(file.getOriginalFilename());
+        String filename=FileNameGenerator.generateFileName(directorDto,directorDto.getImage())+fileExtension;
+        String uploadDirectory=DefaultSaveLocations.DEFAULT_DIRECTORS_IMAGE_SAVE;
+        String imageLocation=uploadDirectory+DefaultSaveLocations.DEFAULT_DIRECTORS_IMAGE_SAVE+filename;
 
+        System.out.println(imageLocation);
+        System.out.println(uploadDirectory);
+
+        Director localDirector=new Director(directorDto.getFirstName(),directorDto.getLastName(),directorDto.getBirthDate(),directorDto.getDeathDate(), filename);
+        List<Director> directors = new ArrayList<>(directorRepository.findByFirstNameContainingOrLastNameContaining(directorDto.getFirstName(), directorDto.getLastName()));
+        System.out.println(directors);
         Director existingDirector = directors.stream()
                 .filter(d -> d.equals(localDirector))
                 .findFirst()
                 .orElse(null);
         if (existingDirector != null) {
-            result.addError(new ObjectError("errorMessage", "This Director already exists"));
+            result.rejectValue("firstName", "director.exists", "This Director already exists");
             return "/admin_director_create";
         }
 
-        directorRepository.save(localDirector);
         try {
             if (file != null) {
-                FileUploader.saveFileToLocalDirectory(file, imageLocation, filename);
+                FileUploader.saveFileToLocalDirectory(file, uploadDirectory, filename);
             }
         }catch (IOException e){
             System.out.println("There was a problem Saving the image S K I P Z "+ e);
+            e.printStackTrace();
+            System.out.println("-------------------");
         }
-        return "/admin/directors/list_view";
+        directorRepository.save(localDirector);
+        return "redirect:/admin/directors/list_view";
     }
 }

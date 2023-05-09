@@ -1,6 +1,8 @@
 package com.siw.uniroma3.it.siw_lavendetta.models;
 
+import com.siw.uniroma3.it.siw_lavendetta.constants.DefaultSaveLocations;
 import com.siw.uniroma3.it.siw_lavendetta.constants.StaticURLs;
+import org.apache.tomcat.jni.Local;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,12 +29,12 @@ public class Director {
     private String lastName;
 
     @Column(name = "birth_date", nullable = false)
-    @DateTimeFormat(pattern = "MM-dd-yyyy")
-    private String birthDate;
+//    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    private LocalDate birthDate;
 
-    @Column(name = "death_date", nullable = true)
-    @DateTimeFormat(pattern = "MM-dd-yyyy")
-    private String deathDate;
+    @Column(name = "death_date")
+//    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    private LocalDate deathDate;
 
     @Column(name = "foto",nullable = true)
     private String image;
@@ -44,7 +46,7 @@ public class Director {
     public Director(){
 
     }
-    public Director( String firstName, String lastName, String birthDate, String deathDate, String image) {
+    public Director( String firstName, String lastName, LocalDate birthDate, LocalDate deathDate, String image) {
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -59,7 +61,15 @@ public class Director {
         if (this == o) return true;
         if (!(o instanceof Director)) return false;
         Director director = (Director) o;
-        return Objects.equals(id, director.id) && Objects.equals(firstName, director.firstName) && Objects.equals(lastName, director.lastName) && Objects.equals(birthDate, director.birthDate);
+        if (director.getDeathDate() == null && this.getDeathDate()==null) {
+            return Objects.equals(firstName, director.firstName) && Objects.equals(lastName, director.lastName) &&
+                    Objects.equals(birthDate, director.birthDate);
+        } else if (director.getDeathDate() != null && this.getDeathDate() != null) {
+            return Objects.equals(firstName, director.firstName) && Objects.equals(lastName, director.lastName) &&
+                    Objects.equals(birthDate, director.birthDate) && Objects.equals(deathDate, director.deathDate);
+
+        }
+        return false;
     }
 
     @Override
@@ -91,20 +101,20 @@ public class Director {
         this.lastName = lastName;
     }
 
-    public String getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
 
         this.birthDate =  birthDate;
     }
 
-    public String getDeathDate() {
+    public LocalDate getDeathDate() {
         return deathDate;
     }
 
-    public void setDeathDate(String deathDate) {
+    public void setDeathDate(LocalDate deathDate) {
         this.deathDate = deathDate;
     }
 
@@ -128,6 +138,12 @@ public class Director {
 
     public String getFullName(){
         return this.firstName +" "+ this.lastName;
+    }
+    @Transient
+    public String getImagePath() {
+        if (this.image == null || id == null) return null;
+
+        return "/"+ DefaultSaveLocations.DEFAULT_DIRECTORS_IMAGE_SAVE + this.image;
     }
 
 }
