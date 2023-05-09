@@ -45,11 +45,10 @@ public class Film {
     public Film(){}
 
     public Film(String title, int releaseYear, Director director) {
+        super();
         this.title = title;
         this.releaseYear = releaseYear;
         this.director = director;
-        this.actors=new HashSet<>();
-        this.images= new HashSet<>();
     }
 
     @Override

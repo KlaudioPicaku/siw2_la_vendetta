@@ -1,5 +1,6 @@
 package com.siw.uniroma3.it.siw_lavendetta.models;
 
+import com.siw.uniroma3.it.siw_lavendetta.constants.DefaultSaveLocations;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -32,21 +33,19 @@ public class Actor {
     @Column(name = "image",nullable = true)
     private String image;
 
-    @ManyToMany(mappedBy = "actors")
-    private Set<Film> films = new HashSet<>();
 
     // costruttori, getter, setter, equals, hashCode, toString
     public Actor(){
 
     }
 
-    public Actor(String firstName, String lastName, LocalDate birthDate, LocalDate deathDate, String image, Film film) {
+    public Actor(String firstName, String lastName, LocalDate birthDate, LocalDate deathDate, String image) {
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.deathDate = deathDate;
         this.image = image;
-        this.films.add(film);
     }
 
     @Override
@@ -109,12 +108,13 @@ public class Actor {
     public void setImage(String image) {
         this.image = image;
     }
-
-    public Set<Film> getFilms() {
-        return films;
+    public String getFullName(){
+        return this.firstName + " " +this.lastName;
     }
+    @Transient
+    public String getImagePath() {
+        if (this.image == null || id == null) return null;
 
-    public void setFilms(Set<Film> films) {
-        this.films = films;
+        return "/"+ DefaultSaveLocations.DEFAULT_ACTORS_IMAGE_SAVE + this.image;
     }
 }

@@ -29,8 +29,6 @@ import java.util.Iterator;
 import java.util.List;
 @Controller
 public class DirectorController {
-    @Autowired
-    private Environment environment;
 
     private DirectorService directorService;
 
@@ -68,10 +66,10 @@ public class DirectorController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/directors/create")
     public String directorCreate(@Valid @ModelAttribute("director") DirectorDto directorDto, BindingResult result){
-        System.out.println("POST ESEGUITA!");
+//        System.out.println("POST ESEGUITA!");
 //        directorDto.setBirthDate("2023-05-08");
-        System.out.println(directorDto.toString());
-        System.out.println(result);
+//        System.out.println(directorDto.toString());
+//        System.out.println(result);
         if (result.hasErrors()) {
             return "/admin_director_create";
         }

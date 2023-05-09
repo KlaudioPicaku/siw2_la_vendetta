@@ -39,21 +39,21 @@ public class Director {
     @Column(name = "foto",nullable = true)
     private String image;
 
-    @OneToMany(mappedBy = "director")
-    private Set<Film> films = new HashSet<>();
+//    @OneToMany(mappedBy = "director")
+//    private Set<Film> films = new HashSet<>();
 
     // costruttori, getter, setter, equals, hashCode, toString
     public Director(){
 
     }
     public Director( String firstName, String lastName, LocalDate birthDate, LocalDate deathDate, String image) {
-
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.deathDate = deathDate;
         this.image = image;
-        this.films=new HashSet<>();
+//        this.films=new HashSet<>();
     }
 
     @Override
@@ -126,13 +126,13 @@ public class Director {
         this.image = image;
     }
 
-    public Set<Film> getFilms() {
-        return films;
-    }
-
-    public void setFilms(Set<Film> films) {
-        this.films = films;
-    }
+//    public Set<Film> getFilms() {
+//        return films;
+//    }
+//
+//    public void setFilms(Set<Film> films) {
+//        this.films = films;
+//    }
 
     public String getAbsoluteUrl(){ return StaticURLs.DIRECTOR_DETAIL_URL+this.getId();}
 

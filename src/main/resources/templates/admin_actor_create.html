@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="/fragments/base :: html" th:with="contentTemplate='admin_actor_create'">
+<div class="container mt-3" th:fragment="content">
+    <div class="mt-4 mb-4">
+        <h2 style="color:white">Admin Panel/Actor List/Create </h2>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <img src="/static/images/create_actor-removebg.png" class="slideRight ml-2" width="350" height="350">
+        </div>
+        <div class="fadeIn col-md-6">
+            <form th:action="@{/admin/actors/create}" method="post" enctype="multipart/form-data">
+                <label for="actor_first_name" style="color:white">First Name:</label>
+                <input type="text" id="actor_first_name" class="form-control" th:field="*{actor.firstName}" required />
+                <div th:if="${#fields.hasErrors('actor.firstName')}">
+                    <p class="error-alert"  style="color:red"  th:each="error : ${#fields.errors('actor.firstName')}" th:text="${error}"></p>
+                </div>
+                <label for="actor_last_name" style="color:white">Last Name:</label>
+                <input type="text" id="actor_last_name" class="form-control" th:field="*{actor.lastName}" required />
+                <div th:if="${#fields.hasErrors('actor.lastName')}">
+                    <p class="error-alert" style="color:red" th:each="error : ${#fields.errors('actor.lastName')}" th:text="${error}"></p>
+                </div>
+                <label for="actor_birthDate" style="color:white">Date Of birth:</label>
+                <input type="date" id="actor_birthDate" name="birthDate" class="form-control date-picker" th:field="*{actor.birthDate}" required />
+                <div th:if="${#fields.hasErrors('actor.birthDate')}">
+                    <p class="error-alert"  style="color:red" th:each="error : ${#fields.errors('actor.birthDate')}" th:text="${error}"></p>
+                </div>
+                <label for="actor_deathDate" style="color:white">Date Of Death:(Optional)</label>
+                <input type="date" id="actor_deathDate" name="deathDate" class="form-control date-picker" th:field="*{actor.deathDate}"  />
+
+                <label for="image" style="color:white">Image:</label>
+                <input type="file" id="image" class="form-control-file" th:field="*{actor.image}" accept="image/*" required/>
+                <div id="selected-images"></div>
+                <div th:if="${#fields.hasErrors('actor.image')}">
+                    <p class="error-alert"  style="color:red" th:each="error : ${#fields.errors('actor.image')}" th:text="${error}"></p>
+                </div>
+                <button class="btn btn-primary mt-4" type="submit">Create actor</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+</html>

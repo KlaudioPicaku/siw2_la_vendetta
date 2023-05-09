@@ -1,5 +1,6 @@
 package com.siw.uniroma3.it.siw_lavendetta.controllers;
 
+import com.siw.uniroma3.it.siw_lavendetta.dto.DirectorDto;
 import com.siw.uniroma3.it.siw_lavendetta.dto.FilmDto;
 import com.siw.uniroma3.it.siw_lavendetta.models.Actor;
 import com.siw.uniroma3.it.siw_lavendetta.models.Director;
@@ -13,9 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -77,6 +82,16 @@ public class FilmController {
         model.addAttribute("directors",directors);
         model.addAttribute("actors",actors);
         return "admin_film_create";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/admin/films/create")
+    public String adminMovieCreation(@Valid @ModelAttribute("film") FilmDto filmDto, BindingResult result){
+        if (result.hasErrors()) {
+            return "/admin_film__create";
+        }
+
+        return "redirect:/admin/films/list_view";
     }
 
 

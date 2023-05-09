@@ -12,11 +12,13 @@
         <label for="releaseYear" style="color:white">Release Year:</label>
         <input type="number" id="releaseYear" class="form-control" th:field="*{film.releaseYear}" required />
         <label for="director" style="color:white">Director:</label>
-        <select id="director" name="director" th:field="*{film.director}" required>
-          <option th:each="director : ${directors}" th:value="${director.id}" th:text="${director.name}"></option>
+        <select class="select" id="director" name="director" th:field="*{film.director}" required>
+          <option value=" "></option>
+          <option th:each="director : ${directors}" th:value="${director.id}" th:text="${director.firstName + ' ' + director.lastName}"></option>
         </select>
         <label for="actors" style="color:white">Actors:</label>
-        <select id="actors" th:field="*{film.actors}" multiple required class="js-select2">
+        <select class="select" id="actors" th:field="*{film.actors}" multiple required >
+          <option value=" "></option>
           <option th:each="actor : ${actors}" th:value="${actor.id}" th:text="${actor.name}"></option>
         </select>
         <label for="image" style="color:white">Images (the first one is the cover):</label>

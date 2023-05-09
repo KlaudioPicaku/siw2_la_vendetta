@@ -1,11 +1,15 @@
 package com.siw.uniroma3.it.siw_lavendetta.dto;
 
+import com.siw.uniroma3.it.siw_lavendetta.models.Actor;
 import com.siw.uniroma3.it.siw_lavendetta.models.Director;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class FilmDto {
 
@@ -19,20 +23,20 @@ public class FilmDto {
     private Long director;
 
     @NotNull
-    private List<Long> actors;
+    private Set<Actor> actors;
 
     @NotEmpty
     private List<MultipartFile> images;
 
     public FilmDto(){}
 
-    public FilmDto(String title, int releaseYear, Long director, List<Long> actors, List<MultipartFile> images) {
+    public FilmDto(String title, int releaseYear, Long director) {
         super();
         this.title = title;
         this.releaseYear = releaseYear;
         this.director = director;
-        this.actors = actors;
-        this.images = images;
+        this.actors = new HashSet<>();;
+        this.images =new LinkedList<>();
     }
 
     public String getTitle() {
@@ -59,11 +63,11 @@ public class FilmDto {
         this.director = director;
     }
 
-    public List<Long> getActors() {
-        return actors;
+    public Set<Actor> getActors() {
+        return this.actors;
     }
 
-    public void setActors(List<Long> actors) {
+    public void setActors(Set<Actor> actors) {
         this.actors = actors;
     }
 
