@@ -30,10 +30,10 @@
         </tr>
         <tr th:each="film: ${films}">
             <td th:text="${film.getId()}"></td>
-            <td><img th:src="@{${film.getImage()}}" class="rounded-left mr-2" width="45" height="80" alt="Film Cover" /></td>
-            <td><a th:href="@{${film.getAbsoluteUrl()}}" th:text="${film.toString()}"></a></td>
-            <td><a th:href="@{${film.getDirector().getAbsoluteUrl()}}" th:text="${film.getDirector().toString()}"></a></td>
-            <td><a th:href="'/actors/film?id='+ ${film.getId()}">View Cast...</a></td>
+            <td><img th:src="@{${film.getCoverPath()}}" class="rounded-left mr-2" width="45" height="80" alt="Film Cover" /></td>
+            <td><a class="modern-link" th:href="@{${film.getAbsoluteUrl()}}" th:text="${film.toString()}"></a></td>
+            <td><a class="modern-link" th:href="@{${film.getDirector().getAbsoluteUrl()}}" th:text="${film.getDirector().getFullName()}"></a></td>
+            <td><a class="modern-link" th:href="'/actors/film?id='+ ${film.getId()}">View Cast...</a></td>
         </tr>
         </tbody>
     </table>

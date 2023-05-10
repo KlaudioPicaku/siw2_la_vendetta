@@ -1,10 +1,8 @@
 package com.siw.uniroma3.it.siw_lavendetta.impl;
 
 import com.siw.uniroma3.it.siw_lavendetta.models.Film;
-import com.siw.uniroma3.it.siw_lavendetta.repositories.ActorRepository;
-import com.siw.uniroma3.it.siw_lavendetta.repositories.DirectorRepository;
-import com.siw.uniroma3.it.siw_lavendetta.repositories.FilmRepository;
-import com.siw.uniroma3.it.siw_lavendetta.repositories.UserRepository;
+import com.siw.uniroma3.it.siw_lavendetta.models.FilmImage;
+import com.siw.uniroma3.it.siw_lavendetta.repositories.*;
 import com.siw.uniroma3.it.siw_lavendetta.services.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,6 +26,9 @@ public class FilmServiceImpl implements FilmService {
 
     private DirectorRepository directorRepository;
 
+    public FilmServiceImpl() {
+        super();
+    }
     public FilmServiceImpl(FilmRepository filmRepository,
                            UserRepository userRepository,
                            ActorRepository actorRepository,
@@ -38,6 +39,8 @@ public class FilmServiceImpl implements FilmService {
         this.directorRepository=directorRepository;
         this.userRepository=userRepository;
     }
+
+
 
     @Override
     public List<Film> findAll() {
@@ -68,4 +71,5 @@ public class FilmServiceImpl implements FilmService {
     public void delete(Long id) {
         filmRepository.deleteById(id);
     }
+
 }

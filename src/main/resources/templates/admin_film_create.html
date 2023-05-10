@@ -6,7 +6,7 @@
   </div>
   <div class="fadeIn row">
     <div class="col-md-6">
-      <form th:action="@{/films/create}" method="post" enctype="multipart/form-data">
+      <form th:action="@{/admin/films/create}" method="post" enctype="multipart/form-data">
         <label for="title" style="color:white">Title:</label>
         <input type="text" id="title" class="form-control" th:field="*{film.title}" required />
         <label for="releaseYear" style="color:white">Release Year:</label>
@@ -14,12 +14,12 @@
         <label for="director" style="color:white">Director:</label>
         <select class="select" id="director" name="director" th:field="*{film.director}" required>
           <option value=" "></option>
-          <option th:each="director : ${directors}" th:value="${director.id}" th:text="${director.firstName + ' ' + director.lastName}"></option>
+          <option th:each="director : ${directors}" th:value="${director.id}" th:text="${director.fullName}"></option>
         </select>
         <label for="actors" style="color:white">Actors:</label>
         <select class="select" id="actors" th:field="*{film.actors}" multiple required >
           <option value=" "></option>
-          <option th:each="actor : ${actors}" th:value="${actor.id}" th:text="${actor.name}"></option>
+          <option th:each="actor : ${actors}" th:value="${actor.id}" th:text="${actor.fullName}"></option>
         </select>
         <label for="image" style="color:white">Images (the first one is the cover):</label>
         <input type="file" id="image" class="form-control-file" th:field="*{film.images}" accept="image/*" multiple />

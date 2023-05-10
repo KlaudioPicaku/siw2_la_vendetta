@@ -2,19 +2,23 @@ package com.siw.uniroma3.it.siw_lavendetta.models;
 
 import javax.persistence.*;
 
+import com.siw.uniroma3.it.siw_lavendetta.constants.DefaultSaveLocations;
 import com.siw.uniroma3.it.siw_lavendetta.constants.StaticURLs;
+import com.siw.uniroma3.it.siw_lavendetta.impl.FilmServiceImpl;
+import com.siw.uniroma3.it.siw_lavendetta.repositories.FilmImageRepository;
+import com.siw.uniroma3.it.siw_lavendetta.services.FilmService;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "film")
 public class Film {
+
+
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
     @GenericGenerator(name = "native",strategy = "native")
     @Id
@@ -42,6 +46,10 @@ public class Film {
     @OneToMany(mappedBy = "film")
     private Set<Review> reviews = new HashSet<>();
 
+    @Transient
+    private final FilmServiceImpl filmService=new FilmServiceImpl();
+
+
     public Film(){}
 
     public Film(String title, int releaseYear, Director director) {
@@ -57,6 +65,12 @@ public class Film {
         if (!(o instanceof Film)) return false;
         Film film = (Film) o;
         return releaseYear == film.releaseYear && Objects.equals(id, film.id) && Objects.equals(title, film.title);
+    }
+    public boolean equalTitle(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Film)) return false;
+        Film film = (Film) o;
+        return releaseYear == film.releaseYear && Objects.equals(title, film.title);
     }
 
     @Override
@@ -104,23 +118,23 @@ public class Film {
         this.actors = actors;
     }
 
-    public Set<FilmImage> getImages() {
-        return images;
-    }
+//    public Set<FilmImage> getImages() {
+//        return images;
+//    }
+//
+//    public void setImages(Set<FilmImage> images) {
+//        this.images = images;
+//    }
 
-    public void setImages(Set<FilmImage> images) {
-        this.images = images;
-    }
-
-    public void addImage(FilmImage image) {
-        images.add(image);
-        image.setFilm(this);
-    }
-
-    public void removeImage(FilmImage image) {
-        images.remove(image);
-        image.setFilm(null);
-    }
+//    public void addImage(FilmImage image) {
+//        images.add(image);
+//        image.setFilm(this);
+//    }
+//
+//    public void removeImage(FilmImage image) {
+//        images.remove(image);
+//        image.setFilm(null);
+//    }
 
     public Set<Review> getReviews() {
         return reviews;
@@ -136,4 +150,15 @@ public class Film {
     }
 
     public String getAbsoluteUrl(){ return StaticURLs.FILM_DETAIL_URL+this.getId(); }
+    @Transient
+    public String getCoverPath() {
+        Optional<FilmImage> filmImage = this.images.stream().findFirst();
+        if (!filmImage.isPresent() || id == null) return null;
+
+        return "/"+ DefaultSaveLocations.DEFAULT_FILMS_IMAGE_SAVE + filmImage.get().getFilePath();
+    }
+
+    public void addImage(FilmImage image) {
+        this.images.add(image);
+    }
 }

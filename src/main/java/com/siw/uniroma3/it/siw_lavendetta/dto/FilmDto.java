@@ -20,7 +20,7 @@ public class FilmDto {
     private int releaseYear;
 
     @NotNull
-    private Long director;
+    private Director director;
 
     @NotNull
     private Set<Actor> actors;
@@ -30,7 +30,7 @@ public class FilmDto {
 
     public FilmDto(){}
 
-    public FilmDto(String title, int releaseYear, Long director) {
+    public FilmDto(String title, int releaseYear, Director director) {
         super();
         this.title = title;
         this.releaseYear = releaseYear;
@@ -55,11 +55,11 @@ public class FilmDto {
         this.releaseYear = releaseYear;
     }
 
-    public Long getDirector() {
+    public Director getDirector() {
         return director;
     }
 
-    public void setDirector(Long director) {
+    public void setDirector(Director director) {
         this.director = director;
     }
 

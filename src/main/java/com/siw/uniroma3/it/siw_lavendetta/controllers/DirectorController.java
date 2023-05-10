@@ -1,5 +1,4 @@
 package com.siw.uniroma3.it.siw_lavendetta.controllers;
-
 import com.siw.uniroma3.it.siw_lavendetta.constants.DefaultSaveLocations;
 import com.siw.uniroma3.it.siw_lavendetta.dto.DirectorDto;
 import com.siw.uniroma3.it.siw_lavendetta.models.Director;
@@ -10,23 +9,21 @@ import com.siw.uniroma3.it.siw_lavendetta.services.FilmService;
 import com.siw.uniroma3.it.siw_lavendetta.utils.FileNameGenerator;
 import com.siw.uniroma3.it.siw_lavendetta.utils.FileUploader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+
+
+
 @Controller
 public class DirectorController {
 
@@ -78,10 +75,9 @@ public class DirectorController {
         String fileExtension=FileNameGenerator.getFileExtension(file.getOriginalFilename());
         String filename=FileNameGenerator.generateFileName(directorDto,directorDto.getImage())+fileExtension;
         String uploadDirectory=DefaultSaveLocations.DEFAULT_DIRECTORS_IMAGE_SAVE;
-        String imageLocation=uploadDirectory+DefaultSaveLocations.DEFAULT_DIRECTORS_IMAGE_SAVE+filename;
 
-        System.out.println(imageLocation);
-        System.out.println(uploadDirectory);
+//        System.out.println(imageLocation);
+//        System.out.println(uploadDirectory);
 
         Director localDirector=new Director(directorDto.getFirstName(),directorDto.getLastName(),directorDto.getBirthDate(),directorDto.getDeathDate(), filename);
         List<Director> directors = new ArrayList<>(directorRepository.findByFirstNameContainingOrLastNameContaining(directorDto.getFirstName(), directorDto.getLastName()));

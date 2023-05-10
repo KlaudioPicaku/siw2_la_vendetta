@@ -2,13 +2,10 @@ package com.siw.uniroma3.it.siw_lavendetta.models;
 
 import com.siw.uniroma3.it.siw_lavendetta.constants.DefaultSaveLocations;
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "actor")

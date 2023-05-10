@@ -1,5 +1,6 @@
 package com.siw.uniroma3.it.siw_lavendetta.repositories;
 
+import com.siw.uniroma3.it.siw_lavendetta.models.Film;
 import com.siw.uniroma3.it.siw_lavendetta.models.FilmImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,10 @@ public interface FilmImageRepository extends JpaRepository<FilmImage,Long> {
     public List<FilmImage> findAll();
 
     public List<FilmImage> findByFilmId(Long filmId);
+
+//    FilmImage findFirstByFilmOrderByCreatedAt(Film film);
+
+//    FilmImage findFirstByFilmOrderById(Film film);
+
+    FilmImage findFirstByFilmOrderByIdAsc(Film film);
 }
