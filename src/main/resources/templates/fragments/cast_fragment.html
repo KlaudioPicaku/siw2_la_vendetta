@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="contentTemplate='film_card_fragment'">
+
+<body>
+<div th:fragment="film-cast(cast)">
+  <h2 style="color:white">Cast</h2>
+  <ul class="list-group transparent-list" id="cast-list">
+
+    <li  class="list-group-item mt-2" th:each="actor,stat : ${cast}" th:attr="class=list-group + ${stat.index <=3 ? '' : 'd-none'}" >
+      <div class="cast-item mt-2">
+        <div class="cast-image"><img  th:src="${actor.getImagePath()}" class="rounded-left mr-2" width="45" height="50"></div>
+        <div class="cast-name"><a class="modern-link" th:href="@{'/actor/detail?id=' + ${actor.getId()}}" th:text="${actor.getFullName()}" ></a></th:text></div>
+      </div>
+    </li>
+  </ul>
+  <a class="modern-link" id="expand-button">Expand</a>
+</div>
+
+</body>
+</html>

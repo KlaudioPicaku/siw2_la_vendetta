@@ -2,6 +2,7 @@
   color: #ffffff; /* Set the text color to white */
   text-decoration: none;
   border-bottom: 1px solid #007bff;
+  cursor:pointer;
   transition: border-bottom-color 0.3s ease-in-out;
 }
 .modern-link:hover {

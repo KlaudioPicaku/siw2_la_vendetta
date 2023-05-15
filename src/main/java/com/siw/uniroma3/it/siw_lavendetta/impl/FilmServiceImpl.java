@@ -18,6 +18,7 @@ import java.util.Optional;
 public class FilmServiceImpl implements FilmService {
 
 
+    @Autowired
     private FilmRepository filmRepository;
 
     private UserRepository userRepository;
@@ -25,6 +26,7 @@ public class FilmServiceImpl implements FilmService {
     private ActorRepository actorRepository;
 
     private DirectorRepository directorRepository;
+
 
     public FilmServiceImpl() {
         super();
@@ -43,9 +45,7 @@ public class FilmServiceImpl implements FilmService {
 
 
     @Override
-    public List<Film> findAll() {
-        return filmRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
-    }
+    public List<Film> findAll() {return filmRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));}
 
     @Override
     public Optional<Film> findById(Long id) {

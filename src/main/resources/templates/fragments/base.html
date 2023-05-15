@@ -16,9 +16,20 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel=”stylesheet” href=”https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css”>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+          integrity="sha512-c42qTSw/wPZ3/5LBzD+Bw5f7bSF2oxou6wEb+I/lqeaKV5FDIfMvvRp772y4jcJLKuGUOpbJMdg/BTl50fJYAw=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
     <link href="/static/css/wickedcss.min.css" rel="stylesheet">
     <link href="/static/css/date-picker.css" rel="stylesheet">
     <link href="/static/css/modern-links.css" rel="stylesheet">
+    <link href="/static/css/film-card.css" rel="stylesheet">
+    <link href="/static/css/film-carousel.css" rel="stylesheet">
+    <link href="/static/css/modal-content.css" rel="stylesheet">
 
 
 </head>
@@ -28,10 +39,9 @@
     <!-- Contenuto -->
     <div th:replace="${contentTemplate} :: content"></div>
 </div>
-<div class="container h-100 mt-12">
-    <p-dark>Picture Perfect &copy; 2023</p-dark>
+<div class="container h-100 mt-12" style="position: relative;">
+    <p-dark style="position: absolute; bottom: 0; left: 0;">Picture Perfect &copy; 2023</p-dark>
 </div>
-
 <footer th:replace="fragments/footer.html :: footer">
 
 </footer>

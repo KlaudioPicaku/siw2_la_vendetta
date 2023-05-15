@@ -46,8 +46,8 @@ public class DirectorController {
 
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/admin/directors/list_view")
+
+    @GetMapping("/directors/list_view")
     public String getDirectorsList(Model model){
         List<Director> directors= directorRepository.findAll();
         model.addAttribute("directors",directors);

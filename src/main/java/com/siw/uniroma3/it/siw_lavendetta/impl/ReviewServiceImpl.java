@@ -37,12 +37,17 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<Review> findAllByUser(User user) {
-        return reviewRepository.findAllByAuthor(user);
+        return reviewRepository.findAllByUser(user);
     }
 
     @Override
     public List<Review> findAllByFilm(Film film){
         return reviewRepository.findAllByFilm(film);
+    }
+
+    @Override
+    public Review save(Review review) {
+       return this.reviewRepository.save(review);
     }
 
     @Override

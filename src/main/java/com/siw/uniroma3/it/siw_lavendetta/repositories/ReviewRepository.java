@@ -7,11 +7,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByRatingAndFilm(Integer rating, Film film);
 
-    List<Review> findAllByAuthor(User userId);
+    List<Review> findAllByUser(User userId);
 
     List<Review> findAllByFilm(Film film);
+
+    List<Review> findAllByUserAndFilm(User user, Optional<Film> film);
 }

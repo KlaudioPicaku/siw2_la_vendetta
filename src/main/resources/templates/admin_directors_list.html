@@ -2,8 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org" th:include="/fragments/base :: html" th:with="contentTemplate='admin_directors_list'" xmlns="http://www.w3.org/1999/html" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <body>
 <div class="container mt-3" th:fragment="content">
-  <div class="mt-4 mb-4">
-    <h2 style="color:white">Admin Panel/Director's List </h2>
+  <div th:if="${#httpServletRequest != null and #httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+    <div th:if="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+      <div class="mt-4 mb-4">
+        <h2 style="color:white">Admin Panel/Director List</h2>
+      </div>
+    </div>
+  </div>
+  <div th:unless="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+    <div class="mt-4 mb-4">
+      <h2 style="color:white">All Directors</h2>
+    </div>
   </div>
   <table class="table slideDown" style="color:white">
     <thead>
@@ -15,10 +24,14 @@
       <th scope="col">Died On</th>
       <th scope="col">Films they directed:</th>
     </tr>
-    <div class="d-flex justify-content-end">
-      <a href="/admin/directors/create" class="fadeIn btn btn-success">Add a Director
-        <i class="material-icons">&#xe145;</i>
-      </a>
+    <div th:if="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+        <div class="d-flex justify-content-end">
+          <div class="d-flex justify-content-end">
+            <a href="/admin/directors/create" class="fadeIn btn btn-success">Add a Director
+              <i class="material-icons">&#xe145;</i>
+            </a>
+          </div>
+        </div>
     </div>
     </thead>
     <tbody>

@@ -81,20 +81,21 @@
                     <div class="form-check d-flex justify-content-center mb-5">
                       <label class="form-check-label" for="agree_to_terms_of_service">
                         <input class="form-check-input me-2" type="checkbox" value="" id="agree_to_terms_of_service" />
-                        I agree all statements in <a id="show_modal" href="#!">Terms of service</a>
+                        I agree all statements in <a id="show_modal" >Terms of service</a>
                       </label>
                     </div>
 
                     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                       <button type="submit" class="register-user btn btn-primary btn-lg">Register</button>
                     </div>
+                      <div class="row">
+                        <p>Already have an account ?<a style="color:black" href="/login"> Login!</a></p>
+                      </div>
                     </div>
-
                   </form>
-
-
-
                 </div>
+
+
                 <div class=" fadeIn col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
                   <div th:replace="/fragments/modals/terms_of_service.html :: modal"></div>
                   <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"

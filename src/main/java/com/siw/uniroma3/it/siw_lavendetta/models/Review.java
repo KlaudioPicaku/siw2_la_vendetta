@@ -3,6 +3,7 @@ package com.siw.uniroma3.it.siw_lavendetta.models;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -18,28 +19,31 @@ public class Review {
     private String title;
     @Column(name = "rating", nullable = false, length = 5)
     private Integer rating;
-    @Column(name = "body", nullable = false, length = 500)
+    @Column(name = "body", nullable = false, length = 1764)
     private String body;
     @Column(name = "createdOn", nullable = false)
     private LocalDateTime createdOn;
     @Column(name = "updatedOn", nullable = false)
     private LocalDateTime updatedOn;
-    @Column(name = "author", nullable = false)
-    private User author;
-    @ManyToOne
+
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @NotNull
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Film film;
 
     // costruttori, getter, setter, equals, hashCode, toString
     public Review(){
 
     }
-    public Review( String title, Integer rating, String body, User author, Film film) {
+    public Review( String title, Integer rating, String body, User user, Film film) {
         this.title = title;
         this.rating = rating;
         this.body = body;
         this.createdOn =LocalDateTime.now();
         this.updatedOn = LocalDateTime.now();
-        this.author = author;
+        this.user = user;
         this.film = film;
     }
 
@@ -104,12 +108,26 @@ public class Review {
         this.updatedOn = updatedOn;
     }
 
-    public User getAuthor() {
-        return author;
+    public User getuser() {
+        return user;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", rating=" + rating +
+                ", body='" + body + '\'' +
+                ", createdOn=" + createdOn +
+                ", updatedOn=" + updatedOn +
+                ", user=" + user +
+                ", film=" + film +
+                '}';
+    }
+
+    public void setuser(User user) {
+        this.user = user;
     }
 
     public Film getFilm() {

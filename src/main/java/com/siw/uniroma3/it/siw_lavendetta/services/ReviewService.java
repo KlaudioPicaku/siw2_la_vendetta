@@ -14,6 +14,8 @@ public interface ReviewService {
 
     List<Review> findAllByFilm(Film film);
 
+    Review save(Review review);
+
     void saveOrUpdate(Review review);
 
     void delete(Long id);

@@ -43,20 +43,22 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-    <div class="container">
+    <div class="movie-list-section mt-2">
+        <a class="modern-link movie-list-link" href="/films/list_view">View All Films...</a>
+    </div>
+    <div class="container mt-2">
         <div class="row">
-            <div class="col-sm-4">
-                <h3>Picture 1</h3>
-                <p-dark>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p-dark>
+
+            <div class="col-sm-3 mt-2 slideRight" style="margin-left:-10px ; margin-right:-10px" th:each="film : ${films}">
+                <div th:replace="fragments/film_card_fragment :: film-card(${film})"></div>
             </div>
-            <div class="col-sm-4">
-                <h3>Picture 2</h3>
-                <p-dark>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p-dark>
+
+            <div th:if="${#lists.isEmpty(films)}">
+                <div class="alert alert-info" role="alert">
+                    <i class="bi bi-info-circle"></i> No films to display!
+                </div>
             </div>
-            <div class="col-sm-4">
-                <h3>Picture 3</h3>
-                <p-dark>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p-dark>
-            </div>
+
         </div>
     </div>
 </div>

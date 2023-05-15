@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:include="/fragments/base :: html" th:with="contentTemplate='admin_film_list'" xmlns="http://www.w3.org/1999/html" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <body>
-<div class="container mt-3" th:fragment="content">
-    <div class="mt-4 mb-4">
-        <h2 style="color:white">Admin Panel/Film List </h2>
+<div class="container mt-3 slideDown" th:fragment="content">
+    <div th:if="${#httpServletRequest != null and #httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+        <div th:if="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+            <div class="mt-4 mb-4">
+                <h2 style="color:white">Admin Panel/Film List</h2>
+            </div>
+        </div>
+    </div>
+    <div th:unless="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+        <div class="mt-4 mb-4">
+            <h2 style="color:white">All Films</h2>
+        </div>
     </div>
     <table class="slidDown table" style="color:white">
         <thead>
@@ -14,10 +23,14 @@
             <th scope="col">Directed By</th>
             <th scope="col">Cast</th>
         </tr>
-        <div class="d-flex justify-content-end">
-            <a href="/admin/films/create" class="btn btn-success">Add a Film
-                <i class="material-icons">&#xe145;</i>
-            </a>
+        <div th:if="${#httpServletRequest != null and #httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+            <div th:if="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+                <div class="d-flex justify-content-end">
+                    <a href="/admin/films/create" class="btn btn-success">Add a Film
+                        <i class="material-icons">&#xe145;</i>
+                    </a>
+                </div>
+            </div>
         </div>
         </thead>
         <tbody>
@@ -28,7 +41,7 @@
                 </div>
             </td>
         </tr>
-        <tr th:each="film: ${films}">
+        <tr class="slideDown" th:each="film: ${films}">
             <td th:text="${film.getId()}"></td>
             <td><img th:src="@{${film.getCoverPath()}}" class="rounded-left mr-2" width="45" height="80" alt="Film Cover" /></td>
             <td><a class="modern-link" th:href="@{${film.getAbsoluteUrl()}}" th:text="${film.toString()}"></a></td>

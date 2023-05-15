@@ -1,0 +1,86 @@
+<html xmlns:th="http://www.thymeleaf.org" th:include="/fragments/base :: html" th:with="contentTemplate='film_detail'" xmlns="http://www.w3.org/1999/html" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+<div class="container mt-3 slideDown" th:fragment="content">
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <input type="hidden" id="filmId" name="film" th:value="${film.getId()}">
+
+  <!-- Film Carousel -->
+  <div id="film-carousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <th:block th:each="image, stat : ${film.getImages()}">
+        <button type="button" data-bs-target="#film-carousel" th:data-bs-slide-to="${stat.index}" th:attr="aria-current=${stat.index == 0 ? 'true' : 'false'},class=${stat.index == 0 ? 'active' : ' '}, aria-label='Slide ' + (${stat.index + 1})"></button>
+      </th:block>
+    </div>
+    <div class="carousel-inner">
+      <th:block th:each="image, stat : ${film.getImages()}">
+        <div class="carousel-item" th:classappend="${stat.index == 0 ? 'active' : ''}">
+          <img th:src="${image.getUrl()}" class="d-block w-100 carousel-item-img" alt="Film Image">
+        </div>
+      </th:block>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#film-carousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#film-carousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  <!-- Film Rating and Review Section -->
+  <div class="row mt-4">
+    <div class="col-md-10">
+      <!-- Check if user is logged in -->
+      <!-- If not logged in, show login or sign up message -->
+      <!-- Example: Use Thymeleaf's `sec:authorize` for authentication -->
+      <div th:if="${reviewLeft}">
+        <p-dark id="review_left">Thanks for reviewing this movie!</p-dark>
+      </div>
+      <div th:if="${#httpServletRequest != null and (#httpServletRequest.isUserInRole('ROLE_ADMIN') or #httpServletRequest.isUserInRole('ROLE_USER'))} and not ${reviewLeft}">
+        <p-dark id="write_a_review_statement">Have you seen this film? <a class="modern-link" id="write_a_review">Leave your thoughts!</a></p-dark>
+      </div>
+      <div th:unless="${(#httpServletRequest.isUserInRole('ROLE_ADMIN') or #httpServletRequest.isUserInRole('ROLE_USER'))}">
+        <a class="modern-link" href="/register">Login or Sign Up to leave your thoughts!</a>
+      </div>
+      <div th:if="${#httpServletRequest != null and (#httpServletRequest.isUserInRole('ROLE_ADMIN'))}">
+          <a  id="edit_film" class="btn btn-warning" th:href="@{'/admin/film/edit?id=' + ${film.getId()}}">Edit</a>
+      </div>
+      <!-- If logged in, show review form -->
+      <!-- Example: Use Thymeleaf's `sec:authorize` for authentication -->
+    </div>
+    <div class="col-md-2">
+      <div>
+        <!-- Film Rating -->
+        <div class="rating">
+          <p-dark>Rating:  </p-dark>
+          <span class="star">&#9733;</span>
+          <span id="rating_value" class="rating-value"></span>
+          <a class="modern-link" id="show_review_modal" data-toggle="modal" data-target="#reviewsModal">
+             (<span id="review_counter" th:text="${number_of_reviews}"></span>)
+          </a>
+        </div>
+        <div id="reviewModal"></div>
+        <!-- Add logic to display the actual rating value for the film -->
+      </div>
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10">
+
+    </div>
+    <div class="col-md-2">
+      <div>
+        <div th:replace="fragments/cast_fragment :: film-cast(${film.getActors()})"></div>
+      </div>
+    </div>
+
+  </div>
+  <div id="formContainer">
+
+  </div>
+</div>
+</body>
+</html>

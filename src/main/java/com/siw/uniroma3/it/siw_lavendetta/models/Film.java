@@ -43,8 +43,6 @@ public class Film {
     @OneToMany(mappedBy = "film", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<FilmImage> images = new HashSet<>();
 
-    @OneToMany(mappedBy = "film")
-    private Set<Review> reviews = new HashSet<>();
 
     @Transient
     private final FilmServiceImpl filmService=new FilmServiceImpl();
@@ -136,13 +134,6 @@ public class Film {
 //        image.setFilm(null);
 //    }
 
-    public Set<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(Set<Review> reviews) {
-        this.reviews = reviews;
-    }
 
     @Override
     public String toString(){
@@ -150,6 +141,11 @@ public class Film {
     }
 
     public String getAbsoluteUrl(){ return StaticURLs.FILM_DETAIL_URL+this.getId(); }
+    @Transient
+    public Set<FilmImage> getImages(){
+        return this.images;
+    }
+
     @Transient
     public String getCoverPath() {
         Optional<FilmImage> filmImage = this.images.stream().findFirst();

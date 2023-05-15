@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="/fragments/base :: html" th:with="contentTemplate='admin_film_edit'">
+<div class="container mt-3" th:fragment="content">
+  <div class="mt-4 mb-4">
+    <h2 style="color:white">Admin Panel/Film List/Edit </h2>
+  </div>
+  <div class="fadeIn row">
+    <div class="col-md-6">
+      <form th:action="@{'/admin/film/edit?id=' + ${film.getId()}}" method="post" enctype="multipart/form-data">
+        <label for="title" style="color:white">Title:</label>
+        <input type="text" id="title" class="form-control" th:field="*{film.title}" required />
+        <label for="releaseYear" style="color:white">Release Year:</label>
+        <input type="number" id="releaseYear" class="form-control" th:field="*{film.releaseYear}" required />
+        <label for="film_description_body" style="color:white">Film Description:</label>
+        <textarea id="film_description_body" rows="4" maxlength="1764" class="form-control" th:field="*{filmDescription.body}" required />
+        <label for="director" style="color:white">Director:</label>
+        <select class="select" id="director" name="director" th:field="*{film.director}" required>
+          <option value=" "></option>
+          <option th:each="director : ${directors}" th:value="${director.id}" th:text="${director.fullName}"></option>
+        </select>
+        <label for="actors" style="color:white">Actors:</label>
+        <select class="select" id="actors" th:field="*{film.actors}" multiple required >
+          <option value=" "></option>
+          <option th:each="actor : ${actors}" th:value="${actor.id}" th:text="${actor.fullName}"></option>
+        </select>
+        <div class="form-group">
+          <div th:if="${film.getImages() != null}">
+            <div th:each="image : ${film.getImages()}">
+            <img class="mt-2" th:src="${image.getUrl()}" alt="Existing Image" width="50" height="50"/>
+            <input type="checkbox" id="removeExistingImage" name="removeExistingImage" value="true" />
+            <label for="removeExistingImage">Remove this Image?</label>
+            </div>
+          </div>
+        </div>
+        <label for="image" style="color:white">Images (the first one is the cover):</label>
+        <input type="file" id="image" class="form-control-file" th:field="*{film.images}" accept="image/*" multiple />
+        <div id="selected-images"></div>
+        <button class="btn btn-primary mt-4" type="submit">Edit Film</button>
+      </form>
+    </div>
+    <div class="slideRight col-md-6">
+      <img src="/static/images/film_edit-removebg.png"  width="500" height="500">
+    </div>
+  </div>
+</div>
+</html>

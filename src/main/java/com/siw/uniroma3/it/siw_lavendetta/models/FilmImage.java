@@ -1,5 +1,7 @@
 package com.siw.uniroma3.it.siw_lavendetta.models;
 
+import com.siw.uniroma3.it.siw_lavendetta.constants.DefaultSaveLocations;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -13,7 +15,7 @@ public class FilmImage {
     @Column(nullable = false)
     private String filePath;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JoinColumn(name = "film_id", nullable = false)
     private Film film;
 
@@ -47,6 +49,12 @@ public class FilmImage {
 
     public void setFilm(Film film) {
         this.film = film;
+    }
+    @Transient
+    public String getUrl(){
+        if (this == null || id == null) return null;
+
+        return "/"+ DefaultSaveLocations.DEFAULT_FILMS_IMAGE_SAVE + this.filePath;
     }
 
     @Override

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="contentTemplate='film_card_fragment'">
+
+<body>
+<div th:fragment="film-card(film)">
+    <div class="film-card">
+        <img th:src="${film.getCoverPath()}" alt="Film Cover">
+        <div class="hover-content">
+            <a class="modern-link" th:href="@{'/film/detail?id=' + ${film.getId()}}">
+                <h3 class="film-title" th:text="${film.getTitle()}+'('+${film.getReleaseYear()+')'}"></h3>
+                <p-dark class="director" th:text="${film.getDirector().getFullName()}"></p-dark>
+                <div class="rating">
+                    <span class="star">&#9733;</span>
+                    <span class="rating-value">4</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
