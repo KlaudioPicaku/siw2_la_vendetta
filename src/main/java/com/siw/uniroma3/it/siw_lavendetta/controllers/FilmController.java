@@ -1,5 +1,6 @@
 package com.siw.uniroma3.it.siw_lavendetta.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.siw.uniroma3.it.siw_lavendetta.constants.DefaultSaveLocations;
 import com.siw.uniroma3.it.siw_lavendetta.dto.DirectorDto;
 import com.siw.uniroma3.it.siw_lavendetta.dto.FilmDescriptionDto;
@@ -11,6 +12,7 @@ import com.siw.uniroma3.it.siw_lavendetta.repositories.*;
 import com.siw.uniroma3.it.siw_lavendetta.services.*;
 import com.siw.uniroma3.it.siw_lavendetta.utils.FileNameGenerator;
 import com.siw.uniroma3.it.siw_lavendetta.utils.FileUploader;
+import com.siw.uniroma3.it.siw_lavendetta.utils.JSONIntArrayStringtoArrayListConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -103,7 +105,7 @@ public class FilmController {
             if(filmDescription){
                 model.addAttribute("filmDescription",filmDescriptionService.findByFilmId((long)id).get());
             }else{
-                model.addAttribute("filmDescription",new FilmDescriptionDto());
+                model.addAttribute("filmDescription",new FilmDescription());
             }
             model.addAttribute("film",film);
             model.addAttribute("directors",directorService.findAll());
@@ -111,6 +113,71 @@ public class FilmController {
         }
         return "admin_film_edit";
     }
+    @PostMapping("/admin/film/edit")
+    public String filmEditPost(@ModelAttribute ("film") Film film,
+                               @Valid @ModelAttribute("filmDescription") FilmDescription filmDescription,
+                               @RequestParam("selectedImageIds") String selectedImageIds,
+                               @RequestParam("uploadedImages") List<MultipartFile> images,
+                               @RequestParam("filmId") String filmIdString,
+                               BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return "/admin_film_edit";
+        }
+        long filmId=Long.parseLong(filmIdString);
+        film.setId(filmId);
+        filmDescription.setFilm(filmService.findById(filmId).get());
+        ArrayList<Integer> removedImages= new ArrayList<>();
+//        for (MultipartFile image: images){
+//            System.out.println("immagini caricate: ");
+//            System.out.println(image.getOriginalFilename());
+//        }
+        try {
+            removedImages= JSONIntArrayStringtoArrayListConverter.convertJsonIntegerStringToIntegerArrayList(selectedImageIds);
+        } catch (JsonProcessingException e) {
+            System.out.println("No images removed S K I P Z !");
+        }
+        System.out.println(film.getId());
+        if(!filmDescription.getBody().isEmpty()){
+            if(filmDescriptionService.findByFilmId(filmId).isPresent()){
+                filmDescription.setId(filmDescriptionService.findByFilmId(filmId).get().getId());
+            }
+            filmDescriptionService.saveOrUpdate(filmDescription);
+        }
+        if(!removedImages.isEmpty()){
+            for(Integer imageId:removedImages){
+                System.out.println("to delete "+imageId);
+                FilmImage toRemove=filmImageService.findById((long)imageId).get();
+                filmImageService.delete(toRemove);
+            }
+        }
+            try{
+                String uploadDirectory= DefaultSaveLocations.DEFAULT_FILMS_IMAGE_SAVE;
+
+                if (images!=null && !images.isEmpty()){
+                    for (MultipartFile file: images) {
+                        if (!file.getOriginalFilename().isEmpty()) {
+                            String fileExtension = FileNameGenerator.getFileExtension(file.getOriginalFilename());
+                            String filename = FileNameGenerator.generateFileName(film, file) + fileExtension;
+                            FileUploader.saveFileToLocalDirectory(file, uploadDirectory, filename);
+                            FilmImage filmImage = new FilmImage(filename, film);
+                            film.addImage(filmImageRepository.save(filmImage));
+                            filmRepository.save(film);
+                        }
+                    }
+                }
+            }catch (IOException e){
+                System.out.println("There was a problem Saving the image S K I P Z "+ e);
+                System.out.print("CAUTION: Deleting uploaded files");
+//                filmRepository.delete(film);
+                e.printStackTrace();
+                System.out.println("-------------------");
+            }
+
+
+        return "redirect:/film/detail?id="+film.getId();
+//        return null;
+    }
+
     @GetMapping("/film/detail")
     public String filmDetail(@RequestParam("id") Long id,Model model){
         Optional<Film> film=filmRepository.findById(id);
@@ -135,6 +202,13 @@ public class FilmController {
 
         if (film !=null){
             model.addAttribute("film", film.get());
+            if(filmDescriptionService.findByFilmId(film.get().getId()).isPresent()){
+                model.addAttribute("filmDescrptionBody",filmDescriptionService.findByFilmId(film.get().getId()).get().getBody());
+
+            }else{
+                model.addAttribute("filmDescrptionBody","");
+
+            }
             return "film_detail";
         }
         return "error/404";
@@ -176,7 +250,7 @@ public class FilmController {
             return "error/403";
         }
         List<MultipartFile> files= filmDto.getImages();
-        System.out.println(files);
+//        System.out.println(files);
         String uploadDirectory= DefaultSaveLocations.DEFAULT_FILMS_IMAGE_SAVE;
         Film localFilm= new Film(filmDto.getTitle(),filmDto.getReleaseYear(),filmDto.getDirector());
         List<Film> films=new ArrayList<>(filmRepository.findByTitleContainingIgnoreCase(localFilm.getTitle()));

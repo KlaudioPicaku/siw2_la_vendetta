@@ -6,7 +6,7 @@ function loadReviews() {
   if (isLoading) return; // Prevent multiple simultaneous requests
   isLoading = true;
   var film = $("#filmId").val();
-if($("#reviewsContainer").length>0){
+if($("#reviewsContainer").length>0 && $('.review-entry-container').length<(parseInt($('#review_counter').text()))){
   // Send a request to fetch reviews from your server or API
   $.ajax({
     url: '/api/reviews/load',
@@ -52,14 +52,10 @@ if($("#reviewsContainer").length>0){
       isLoading = false; // Reset the loading flag in case of an error
     }
   });
-     $('#load_more_reviews').click(function(){
-        if($('.review-entry-container').length<(parseInt($('#review_counter').text()))){
-           page++;
-//           console.log(page);
-           loadReviews();
-        }
-     });
+    page++;
+    console.log(page);
 }
+
 }
 
 

@@ -17,8 +17,10 @@
   <table class="table slideDown" style="color:white">
     <thead>
     <tr>
-      <th scope="col">id</th>
-      <th scope="col">Image</th>
+      <div th:if="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+        <th scope="col">id</th>
+      </div>
+      <th scope="col">  </th>
       <th scope="col">Full Name</th>
       <th scope="col">Born on:</th>
       <th scope="col">Died On</th>
@@ -43,12 +45,14 @@
       </td>
     </tr>
     <tr class="slideDown" th:each="director: ${directors}">
-      <td th:text="${director.getId()}"></td>
+      <div th:if="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+        <td th:text="${director.getId()}"></td>
+      </div>
       <td><img th:src="@{${director.ImagePath}}" class="rounded-left mr-2" width="45" height="70" alt="Director Image" /></td>
       <td th:text="${director.getFullName()}"></td>
       <td th:text="${director.getBirthDate()}"></td>
       <td th:text="${director.getDeathDate()}"></td>
-      <td><a th:href="'/films/director?id='+ ${director.getId()}">View Filmography...</a></td>
+      <td><a class="modern-link" th:href="'/director/detail?id='+ ${director.getId()}">View Filmography...</a></td>
     </tr>
     </tbody>
   </table>

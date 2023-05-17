@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="/fragments/base :: html" th:with="contentTemplate='director_detail'" xmlns="http://www.w3.org/1999/html" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+<div class="container mt-3" th:fragment="content">
+  <div class="row">
+    <div class=" col-md-4">
+      <div class="profile-detail ">
+        <img class="slideRight" th:src="${director.getImagePath()}" alt="Profile Picture">
+      </div>
+      <div class="mt-2 d-flex justify-content-center" th:if="${#httpServletRequest != null and (#httpServletRequest.isUserInRole('ROLE_ADMIN'))}">
+        <a  id="edit_director" class="btn btn-warning" th:href="@{'/admin/director/edit?id=' + ${director.getId()}}">Edit</a>
+        <a  id="delete_director" class="btn btn-danger" th:href="@{'/admin/director/delete_confirm?id=' + ${director.getId()}}">Delete</a>
+      </div>
+      <p-dark></p-dark>
+    </div>
+    <div class="col-md-8">
+      <h2 style="color:white" th:text="${director.getFullName()}" class="font-weight-bold"></h2>
+      <i style="color:white; font-size:11px" th:text="${director.getLifeSpan()}" class="font-weight-bold"></i>
+      <h3 class="mt-2">Films</h3>
+      <div th:replace="fragments/film-table :: film-table(${films})"></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

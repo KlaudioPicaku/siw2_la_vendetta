@@ -10,6 +10,8 @@ import javax.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -126,6 +128,17 @@ public class Director {
         this.image = image;
     }
 
+    public String getLifeSpan(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedBirthDate = this.birthDate.format(formatter);
+        String formattedDeathDate = this.deathDate != null ? this.deathDate.format(formatter) : "";
+        if(formattedDeathDate.isEmpty()){
+            return formattedBirthDate;
+        }
+        String formattedDates = formattedBirthDate + "-" + formattedDeathDate;
+        return formattedDates;
+    }
+
 //    public Set<Film> getFilms() {
 //        return films;
 //    }
@@ -133,6 +146,18 @@ public class Director {
 //    public void setFilms(Set<Film> films) {
 //        this.films = films;
 //    }
+
+    @Override
+    public String toString() {
+        return "Director{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthDate=" + birthDate +
+                ", deathDate=" + deathDate +
+                ", image='" + image + '\'' +
+                '}';
+    }
 
     public String getAbsoluteUrl(){ return StaticURLs.DIRECTOR_DETAIL_URL+this.getId();}
 
@@ -144,6 +169,13 @@ public class Director {
         if (this.image == null || id == null) return null;
 
         return "/"+ DefaultSaveLocations.DEFAULT_DIRECTORS_IMAGE_SAVE + this.image;
+    }
+
+    @Transient
+    public String getAbsoluteImageUrl(){
+        if (this.image == null || id == null) return null;
+
+        return DefaultSaveLocations.DEFAULT_DIRECTORS_IMAGE_SAVE + this.image;
     }
 
 }

@@ -11,4 +11,6 @@ public interface DirectorService {
     List<Director> findByName(String name);
     void saveOrUpdate(Director director);
     void delete(Long id);
+
+    void deleteDirectorImage(String absoluteImageUrl);
 }

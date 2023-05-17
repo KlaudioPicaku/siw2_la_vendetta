@@ -15,7 +15,7 @@ public class FilmImage {
     @Column(nullable = false)
     private String filePath;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "film_id", nullable = false)
     private Film film;
 
@@ -55,6 +55,12 @@ public class FilmImage {
         if (this == null || id == null) return null;
 
         return "/"+ DefaultSaveLocations.DEFAULT_FILMS_IMAGE_SAVE + this.filePath;
+    }
+    @Transient
+    public String getRelativeUrl(){
+        if (this == null || id == null) return null;
+
+        return DefaultSaveLocations.DEFAULT_FILMS_IMAGE_SAVE + this.filePath;
     }
 
     @Override

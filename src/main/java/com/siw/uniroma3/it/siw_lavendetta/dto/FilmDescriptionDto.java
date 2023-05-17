@@ -5,12 +5,11 @@ import javax.validation.constraints.NotNull;
 
 public class FilmDescriptionDto {
 
-    @NotNull
+
     @NotEmpty
     private String body;
 
-    @NotNull
-    @NotEmpty
+
     private int filmId;
 
     public FilmDescriptionDto() {

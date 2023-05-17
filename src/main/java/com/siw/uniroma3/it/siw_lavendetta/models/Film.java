@@ -40,7 +40,7 @@ public class Film {
             inverseJoinColumns = @JoinColumn(name = "actor_id"))
     private Set<Actor> actors = new HashSet<>();
 
-    @OneToMany(mappedBy = "film", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "film",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<FilmImage> images = new HashSet<>();
 
 

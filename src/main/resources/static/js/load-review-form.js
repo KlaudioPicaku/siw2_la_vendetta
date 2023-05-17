@@ -29,34 +29,36 @@ if($("#review_counter").length>0){
   });
   }
 }
-function loadReviewModal(){
- $.ajax({
+function loadReviewModal() {
+  $.ajax({
     url: "/load-reviews",
     method: "GET",
-    success: function(response) {
+    success: function (response) {
       // console.log(response);
 
       if ($("#modal-overlay").length > 0) {
-        console.log("Reviews are loaded already")
-        loadReviews();
-
+        console.log("Reviews modal is loaded already");
         $("#modal-overlay").fadeIn();
       } else {
         $("#reviewModal").html(response);
         $("#modal-overlay").fadeIn();
-        $("#close-modal").click(function(){
-            $("#modal-overlay").fadeOut();
+        $("#close-modal").click(function () {
+          $("#modal-overlay").fadeOut();
         });
         $('#ratingFilter').on('change', applyFilter);
         loadReviews();
-
-
+        $('#load_more_reviews').click(function () {
+            console.log("click");
+            if ($('.review-entry-container').length < parseInt($('#review_counter').text())) {
+              loadReviews();
+            }
+          });
       }
-      },
-      error: function(xhr, status, error) {
-          console.log(error);
-        }
-      });
+    },
+    error: function (xhr, status, error) {
+      console.log(error);
+    }
+  });
 
 }
 
@@ -148,8 +150,10 @@ function loadForm() {
 $(document).ready(function() {
     updateReviewCounter();
 
+
     $("#show_review_modal").click(function() {
         loadReviewModal();
+
       });
   if ($("#write_a_review").length > 0) {
     $("#write_a_review").click(function() {

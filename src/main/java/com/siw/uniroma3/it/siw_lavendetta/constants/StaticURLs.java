@@ -13,5 +13,5 @@ public class StaticURLs {
     public static final String FILM_DETAIL_URL="/film/detail?id=";
 
 
-    public static final String DIRECTOR_DETAIL_URL="/directors/detail?id=";
+    public static final String DIRECTOR_DETAIL_URL="/director/detail?id=";
 }

@@ -1,8 +1,11 @@
 package com.siw.uniroma3.it.siw_lavendetta.impl;
 
+import com.siw.uniroma3.it.siw_lavendetta.models.Director;
 import com.siw.uniroma3.it.siw_lavendetta.models.Film;
+import com.siw.uniroma3.it.siw_lavendetta.models.FilmDescription;
 import com.siw.uniroma3.it.siw_lavendetta.models.FilmImage;
 import com.siw.uniroma3.it.siw_lavendetta.repositories.*;
+import com.siw.uniroma3.it.siw_lavendetta.services.FilmDescriptionService;
 import com.siw.uniroma3.it.siw_lavendetta.services.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,27 +24,18 @@ public class FilmServiceImpl implements FilmService {
     @Autowired
     private FilmRepository filmRepository;
 
+    @Autowired
+    private FilmDescriptionRepository filmDescriptionRepository;
+    @Autowired
+    private FilmDescriptionService filmDescriptionService;
+
+    @Autowired
     private UserRepository userRepository;
 
+    @Autowired
     private ActorRepository actorRepository;
-
+    @Autowired
     private DirectorRepository directorRepository;
-
-
-    public FilmServiceImpl() {
-        super();
-    }
-    public FilmServiceImpl(FilmRepository filmRepository,
-                           UserRepository userRepository,
-                           ActorRepository actorRepository,
-                           DirectorRepository directorRepository) {
-        super();
-        this.filmRepository = filmRepository;
-        this.actorRepository=actorRepository;
-        this.directorRepository=directorRepository;
-        this.userRepository=userRepository;
-    }
-
 
 
     @Override
@@ -70,6 +64,19 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public void delete(Long id) {
         filmRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Film> findByDirector(Director director){
+        return filmRepository.findByDirector(director);
+    }
+
+    public String filmDescriptionByFilm(Film film){
+        Optional<FilmDescription> filmDescription=filmDescriptionService.findByFilmId(film.getId());
+        if (filmDescription.isPresent()){
+            return  filmDescription.get().getBody();
+        }
+        return "";
     }
 
 }

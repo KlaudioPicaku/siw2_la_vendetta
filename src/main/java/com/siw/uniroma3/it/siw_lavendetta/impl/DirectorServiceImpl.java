@@ -9,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,5 +59,26 @@ public class DirectorServiceImpl implements DirectorService {
     @Override
     public void delete(Long id) {
         directorRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteDirectorImage(String absoluteImageUrl) {
+        String filePath="";
+        if(absoluteImageUrl!=null || !absoluteImageUrl.isEmpty()){
+            filePath=absoluteImageUrl;
+        }
+        if(!filePath.isEmpty()){
+            String baseDirectory = System.getProperty("user.dir");
+            Path path = Paths.get(baseDirectory,filePath);
+//            System.out.println(path);
+
+            try {
+                Files.delete(path);
+                System.out.println("File deleted successfully.");
+            } catch (IOException e) {
+                System.out.println("Failed to delete the file: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
     }
 }

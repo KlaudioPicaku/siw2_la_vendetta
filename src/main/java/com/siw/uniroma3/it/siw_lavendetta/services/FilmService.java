@@ -1,5 +1,6 @@
 package com.siw.uniroma3.it.siw_lavendetta.services;
 
+import com.siw.uniroma3.it.siw_lavendetta.models.Director;
 import com.siw.uniroma3.it.siw_lavendetta.models.Film;
 import com.siw.uniroma3.it.siw_lavendetta.repositories.FilmImageRepository;
 
@@ -15,4 +16,5 @@ public interface FilmService {
         void saveOrUpdate(Film film);
         void delete(Long id);
 
+    List<Film> findByDirector(Director director);
 }

@@ -9,13 +9,15 @@ public class FilmDescription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "film_id", nullable = false)
     private Film film;
 
     @Column(name = "body", nullable = false, length = 1764)
     private String body;
+    public FilmDescription(){
 
+    }
 
     public FilmDescription(Film film, String body) {
         super();
@@ -41,5 +43,9 @@ public class FilmDescription {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public void setId(Long id) {
+        this.id=id;
     }
 }

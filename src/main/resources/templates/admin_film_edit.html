@@ -6,7 +6,10 @@
   </div>
   <div class="fadeIn row">
     <div class="col-md-6">
-      <form th:action="@{'/admin/film/edit?id=' + ${film.getId()}}" method="post" enctype="multipart/form-data">
+      <form id="editFilmForm" action="/admin/film/edit" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" id="selectedImageIds" name="selectedImageIds" th:value="${null}" />
+        <input type="hidden" id="filmId" name="filmId" th:value="${film.getId()}" />
         <label for="title" style="color:white">Title:</label>
         <input type="text" id="title" class="form-control" th:field="*{film.title}" required />
         <label for="releaseYear" style="color:white">Release Year:</label>
@@ -27,13 +30,13 @@
           <div th:if="${film.getImages() != null}">
             <div th:each="image : ${film.getImages()}">
             <img class="mt-2" th:src="${image.getUrl()}" alt="Existing Image" width="50" height="50"/>
-            <input type="checkbox" id="removeExistingImage" name="removeExistingImage" value="true" />
-            <label for="removeExistingImage">Remove this Image?</label>
+            <input type="checkbox" th:id="'removeExistingImage'+'_'+${image.getId()}" name="removeExistingImage" th:value="${image.getId()}" />
+            <label th:for="'removeExistingImage'+'_'+${image.getId()}">Remove this Image?</label>
             </div>
           </div>
         </div>
         <label for="image" style="color:white">Images (the first one is the cover):</label>
-        <input type="file" id="image" class="form-control-file" th:field="*{film.images}" accept="image/*" multiple />
+        <input type="file" id="image" name="uploadedImages" class="form-control-file" accept="image/*" multiple />
         <div id="selected-images"></div>
         <button class="btn btn-primary mt-4" type="submit">Edit Film</button>
       </form>

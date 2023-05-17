@@ -9,17 +9,17 @@
         </button>
         <div class="dropdown-menu text-align-right" id="profile_dropdown_menu" aria-labelledby="dropdownMenuButton">
             <a class="dropdown-item" href="#">
-                <i class="bi bi-person-fill text-secondary me-2"></i>Profile
+                <i class="bi bi-person-fill text-secondary me-2">Profile</i>
             </a>
             <div th:if="${#httpServletRequest != null and #httpServletRequest.isUserInRole('ROLE_ADMIN')}">
                 <div th:if="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
                     <a class="dropdown-item" href="/admin/panel">
-                        <i class="bi bi-speedometer text-secondary me-2"></i>Admin Panel
+                        <i class="bi bi-speedometer text-secondary me-2">Admin Panel</i>
                     </a>
                 </div>
             </div>
             <a class="dropdown-item" href="/logout">
-                <i class="bi bi-box-arrow-right text-secondary me-2"></i>Logout
+                <i class="bi bi-box-arrow-right text-secondary me-2">Logout</i>
             </a>
         </div>
     </div>

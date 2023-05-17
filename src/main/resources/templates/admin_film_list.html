@@ -14,42 +14,7 @@
             <h2 style="color:white">All Films</h2>
         </div>
     </div>
-    <table class="slidDown table" style="color:white">
-        <thead>
-        <tr>
-            <th scope="col">id</th>
-            <th scope="col">Cover</th>
-            <th scope="col">Title</th>
-            <th scope="col">Directed By</th>
-            <th scope="col">Cast</th>
-        </tr>
-        <div th:if="${#httpServletRequest != null and #httpServletRequest.isUserInRole('ROLE_ADMIN')}">
-            <div th:if="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
-                <div class="d-flex justify-content-end">
-                    <a href="/admin/films/create" class="btn btn-success">Add a Film
-                        <i class="material-icons">&#xe145;</i>
-                    </a>
-                </div>
-            </div>
-        </div>
-        </thead>
-        <tbody>
-        <tr th:if="${#lists.isEmpty(films)}">
-            <td colspan="5" class="text-center">
-                <div class="alert alert-info" role="alert">
-                    <i class="bi bi-info-circle"></i> No Films to Display
-                </div>
-            </td>
-        </tr>
-        <tr class="slideDown" th:each="film: ${films}">
-            <td th:text="${film.getId()}"></td>
-            <td><img th:src="@{${film.getCoverPath()}}" class="rounded-left mr-2" width="45" height="80" alt="Film Cover" /></td>
-            <td><a class="modern-link" th:href="@{${film.getAbsoluteUrl()}}" th:text="${film.toString()}"></a></td>
-            <td><a class="modern-link" th:href="@{${film.getDirector().getAbsoluteUrl()}}" th:text="${film.getDirector().getFullName()}"></a></td>
-            <td><a class="modern-link" th:href="'/actors/film?id='+ ${film.getId()}">View Cast...</a></td>
-        </tr>
-        </tbody>
-    </table>
+    <div th:replace="fragments/film-table :: film-table(${films})"></div>
 </div>
 </body>
 </html>
