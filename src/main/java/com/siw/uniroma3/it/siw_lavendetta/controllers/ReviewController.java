@@ -4,7 +4,7 @@ import com.siw.uniroma3.it.siw_lavendetta.dto.FilmRating;
 import com.siw.uniroma3.it.siw_lavendetta.dto.ReviewDto;
 import com.siw.uniroma3.it.siw_lavendetta.models.Film;
 import com.siw.uniroma3.it.siw_lavendetta.models.Review;
-import com.siw.uniroma3.it.siw_lavendetta.models.ReviewPublic;
+import com.siw.uniroma3.it.siw_lavendetta.models.ReviewPublicRest;
 import com.siw.uniroma3.it.siw_lavendetta.models.User;
 import com.siw.uniroma3.it.siw_lavendetta.services.FilmService;
 import com.siw.uniroma3.it.siw_lavendetta.services.ReviewService;
@@ -17,9 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -93,9 +91,9 @@ public class ReviewController {
     }
 
     @GetMapping("/api/reviews/load")
-    public List<ReviewPublic> reviewDisplay(@RequestParam(name = "page") int page,
-                                            @RequestParam(name = "film") int filmId,
-                                            @RequestParam(name = "rating", required = false) Integer rating) {
+    public List<ReviewPublicRest> reviewDisplay(@RequestParam(name = "page") int page,
+                                                @RequestParam(name = "film") int filmId,
+                                                @RequestParam(name = "rating", required = false) Integer rating) {
         Film film = filmService.findById((long) filmId).get();
         List<Review> reviews;
 
@@ -105,8 +103,8 @@ public class ReviewController {
             reviews = reviewService.findAllByRatingForFilm(film, rating);
         }
 
-        List<ReviewPublic> reviewsPublic = reviews.stream()
-                .map(r -> new ReviewPublic(r.getTitle(), r.getBody(), r.getuser().getUsername(), r.getRating(), r.getuser().getImage()))
+        List<ReviewPublicRest> reviewsPublic = reviews.stream()
+                .map(r -> new ReviewPublicRest(r.getTitle(), r.getBody(), r.getuser().getUsername(), r.getRating(), r.getuser().getImage(),r.getId()))
                 .collect(Collectors.toList());
 
         int pageSize = 10;
@@ -119,5 +117,6 @@ public class ReviewController {
             return null;
         }
     }
+
 
 }

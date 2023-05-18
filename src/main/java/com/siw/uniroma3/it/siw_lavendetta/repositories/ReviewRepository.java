@@ -18,4 +18,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findAllByFilm(Film film);
 
     List<Review> findAllByUserAndFilm(User user, Optional<Film> film);
+
+    List<Review> findAllByRating(Integer rating);
 }

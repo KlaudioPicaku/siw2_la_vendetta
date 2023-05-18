@@ -6,56 +6,60 @@ function loadReviews() {
   if (isLoading) return; // Prevent multiple simultaneous requests
   isLoading = true;
   var film = $("#filmId").val();
-if($("#reviewsContainer").length>0 && $('.review-entry-container').length<(parseInt($('#review_counter').text()))){
-  // Send a request to fetch reviews from your server or API
-  $.ajax({
-    url: '/api/reviews/load',
-    method: 'GET',
-    data: { page: page, film: film, rating: filter },
-    success: function(response) {
-      // Handle the response and append the reviews to the container
-      var reviews = response.reviews;
-      var $container = $('#reviewsContainer');
-//      console.log(response);
 
-      for (var i = 0; i < response.length; i++) {
-        // Create HTML elements for each review and append to container
-        var $review = $(`
-          <div class="review-entry-container rounded p-3 bg-light">
-            <div class="row">
-              <div class="col-2">
-                <img src="${response[i].reviewPic}" class="rounded-circle" width="50" height="50" alt="Profile Image" />
-              </div>
-              <div class="col-8">
-                <h4>${response[i].reviewAuthor}</h4>
-                <h2>${response[i].reviewTitle}</h2>
-                <p>${response[i].reviewBody}</p>
-              </div>
-              <div class="col-2">
-                <div class="text-right">
-                  <span class="star">&#9733;</span>
-                  <span class="rating-value text-black">${response[i].reviewRating}/5</span>
+  if ($("#reviewsContainer").length > 0 && $('.review-entry-container').length < (parseInt($('#review_counter').text()))) {
+    // Send a request to fetch reviews from your server or API
+    $.ajax({
+      url: '/api/reviews/load',
+      method: 'GET',
+      data: { page: page, film: film, rating: filter },
+      success: function(response) {
+        var reviews = response.reviews;
+        var $container = $('#reviewsContainer');
+        console.log(response)
+        for (var i = 0; i < response.length; i++) {
+          var reviewId = response[i].reviewId;
+
+          // Check the ID
+          if (!$container.find(`[data-review-id="${response[i].reviewId}"]`).length) {
+            var $review = $(`
+              <div class="review-entry-container rounded p-3 bg-light" data-review-id="${response[i].reviewId}">
+                <div class="row">
+                  <div class="col-2">
+                    <img src="${response[i].reviewPic}" class="rounded-circle" width="50" height="50" alt="Profile Image" />
+                  </div>
+                  <div class="col-8">
+                    <h4>${response[i].reviewAuthor}</h4>
+                    <h2>${response[i].reviewTitle}</h2>
+                    <p style="word-break: break-all;">${response[i].reviewBody}</p>
+                  </div>
+                  <div class="col-2">
+                    <div class="text-right">
+                      <span class="star">&#9733;</span>
+                      <span class="rating-value text-black">${response[i].reviewRating}/5</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        `);
-        $container.append($review);
+            `);
+            $container.append($review);
+          }
+        }
+      },
+      error: function() {
+        isLoading = false; // Reset the loading flag in case of an error
       }
+    });
+    isLoading = false;
+    // Attach the scroll event listener to the reviews container
+    console.log("is loading ", isLoading);
 
-//      console.log(page);
-      isLoading=false;
-      // Attach the scroll event listener to the reviews container
-
-    },
-    error: function() {
-      isLoading = false; // Reset the loading flag in case of an error
+    if ($("#reviewsContainer").length > 0 && $('.review-entry-container').length < (parseInt($('#review_counter').text())) && (parseFloat($('#review_counter').text())) / 10 > page) {
+      page++;
     }
-  });
-    page++;
-    console.log(page);
-}
 
+    console.log(page);
+  }
 }
 
 

@@ -75,7 +75,7 @@ public class VerificationToken {
     }
     public boolean isValid() {
         Date currentDate = new Date();
-        return currentDate.before(expiryDate);
+        return currentDate.before(expiryDate) && this.burned !=1 ;
     }
     public void burnToken(){
         this.burned=1;

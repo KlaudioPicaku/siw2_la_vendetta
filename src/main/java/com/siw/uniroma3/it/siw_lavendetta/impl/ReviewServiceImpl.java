@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @Qualifier("reviewServiceImpl")
 public class ReviewServiceImpl implements ReviewService {
@@ -59,5 +61,20 @@ public class ReviewServiceImpl implements ReviewService {
     public void delete(Long id) {
         reviewRepository.deleteById(id);
 
+    }
+
+    @Override
+    public List<Review> findAll() {
+        return reviewRepository.findAll();
+    }
+
+    @Override
+    public List<Review> findAllByRating(Integer rating) {
+        return reviewRepository.findAllByRating(rating);
+    }
+
+    @Override
+    public Optional<Review> findById(Long id) {
+        return reviewRepository.findById(id);
     }
 }

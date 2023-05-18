@@ -11,26 +11,32 @@ import java.util.Objects;
 @Entity
 @Table(name = "review")
 public class Review {
-    @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
-    @GenericGenerator(name = "native",strategy = "native")
+    @GeneratedValue(strategy= GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Id
     private Long id;
-    @Column(name = "title", nullable = false, length = 20)
+
+    @Column(name = "title", nullable = false, length = 256)
     private String title;
+
     @Column(name = "rating", nullable = false, length = 5)
     private Integer rating;
+
     @Column(name = "body", nullable = false, length = 1764)
     private String body;
+
     @Column(name = "createdOn", nullable = false)
     private LocalDateTime createdOn;
+
     @Column(name = "updatedOn", nullable = false)
     private LocalDateTime updatedOn;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne
     @NotNull
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    @ManyToOne(cascade = CascadeType.REMOVE)
+
+    @ManyToOne
     private Film film;
 
     // costruttori, getter, setter, equals, hashCode, toString

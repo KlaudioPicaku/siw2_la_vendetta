@@ -5,6 +5,7 @@ import com.siw.uniroma3.it.siw_lavendetta.models.Review;
 import com.siw.uniroma3.it.siw_lavendetta.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReviewService {
 
@@ -20,4 +21,9 @@ public interface ReviewService {
 
     void delete(Long id);
 
+    List<Review> findAll();
+
+    List<Review> findAllByRating(Integer rating);
+
+    Optional<Review> findById(Long id);
 }

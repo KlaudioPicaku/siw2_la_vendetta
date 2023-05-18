@@ -1,6 +1,6 @@
 package com.siw.uniroma3.it.siw_lavendetta.models;
 
-public class ReviewPublic {
+public class ReviewPublicRest {
     Long reviewId;
     String reviewTitle;
     String reviewBody;
@@ -14,14 +14,13 @@ public class ReviewPublic {
     Film film;
 
 
-    public ReviewPublic(String reviewTitle, String reviewBody, String reviewAuthor, int reviewRating,String reviewPic,Long reviewId, Film film) {
+    public ReviewPublicRest(String reviewTitle, String reviewBody, String reviewAuthor, int reviewRating, String reviewPic, Long reviewId) {
         this.reviewTitle = reviewTitle;
         this.reviewBody = reviewBody;
         this.reviewAuthor = reviewAuthor;
         this.reviewRating = reviewRating;
         this.reviewPic=reviewPic;
         this.reviewId=reviewId;
-        this.film=film;
 
 
     }
