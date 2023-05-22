@@ -6,10 +6,13 @@
 <table class="slidDown table" style="color:white">
   <thead>
   <tr>
-    <th scope="col">id</th>
+    <div th:if="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+      <th scope="col">id</th>
+    </div>
     <th scope="col">Cover</th>
     <th scope="col">Title</th>
     <th scope="col">Directed By</th>
+    <th scope="col">Reviews</th>
     <th scope="col">Cast</th>
   </tr>
   <div th:if="${#httpServletRequest != null and #httpServletRequest.isUserInRole('ROLE_ADMIN')}">
@@ -23,7 +26,7 @@
   </div>
   </thead>
   <tbody>
-  <tr th:if="${#lists.isEmpty(films)}">
+  <tr th:if="${#maps.isEmpty(films)}">
     <td colspan="5" class="text-center">
       <div class="alert alert-info" role="alert">
         <i class="bi bi-info-circle"></i> No Films to Display
@@ -31,14 +34,23 @@
     </td>
   </tr>
   <tr class="slideDown" th:each="film: ${films}">
-    <td th:text="${film.getId()}"></td>
-    <td><img th:src="@{${film.getCoverPath()}}" class="rounded-left mr-2" width="45" height="80" alt="Film Cover" /></td>
-    <td><a class="modern-link" th:href="@{${film.getAbsoluteUrl()}}" th:text="${film.toString()}"></a></td>
-    <td><a class="modern-link" th:href="@{${film.getDirector().getAbsoluteUrl()}}" th:text="${film.getDirector().getFullName()}"></a></td>
-    <td><a class="modern-link" th:href="'/actors/film?id='+ ${film.getId()}">View Cast...</a></td>
+    <div th:if="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+      <td th:text="${film.key.getId()}"></td>
+    </div>
+    <td><img th:src="@{${film.key.getCoverPath()}}" class="rounded-left mr-2" width="45" height="80" alt="Film Cover" /></td>
+    <td><a class="modern-link" th:href="@{${film.key.getAbsoluteUrl()}}" th:text="${film.key.toString()}"></a></td>
+    <td><a class="modern-link" th:href="@{${film.key.getDirector().getAbsoluteUrl()}}" th:text="${film.key.getDirector().getFullName()}"></a></td>
+    <td>
+      <span class="star">&#9733;</span>
+      <span class="rating-value" th:text="${film.value}"></span>
+    </td>
+    <td><a class="modern-link" th:href="'/actors/film?page=1&id='+ ${film.key.getId()}">View Cast...</a></td>
   </tr>
   </tbody>
 </table>
+  <form action="/films/list_view?page=" method="GET">
+    <div th:replace="fragments/pagination :: pagination(${maxNumberOfPages})"></div>
+  </form>
 </div>
 </body>
 </html>

@@ -1,6 +1,8 @@
 package com.siw.uniroma3.it.siw_lavendetta.models;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -31,13 +33,14 @@ public class Review {
     @Column(name = "updatedOn", nullable = false)
     private LocalDateTime updatedOn;
 
-    @OneToOne
-    @NotNull
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "film_Id", nullable = false)
     private Film film;
+
 
     // costruttori, getter, setter, equals, hashCode, toString
     public Review(){

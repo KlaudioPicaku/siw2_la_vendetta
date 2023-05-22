@@ -21,6 +21,8 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
+
 @Controller
 public class RegistrationController {
 
@@ -48,30 +50,33 @@ public class RegistrationController {
         if (result.hasErrors()) {
             return "register";
         }
-        UserDetails userDetails=null;
+        if (!user.getPassword().equals(user.getConfirmPassword())) {
+            result.rejectValue("confirmPassword", "error.confirmPassword", "Password and confirmation password do not match");
+        }
+        Optional<User> userDetails=null;
         if (userDetailsService!=null){
             System.out.println("is not null");
         }
         try {
-            userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-            // other code here
-            result.rejectValue("username", "error.user", "Username is already in use");
-            return "register";
+            userDetails = userService.getUserByUsername(user.getUsername());
+            if(userDetails.isPresent()) {
+                result.rejectValue("username", "error.user", "Username is already in use");
+                return "register";
+            }
         } catch (UsernameNotFoundException ex) {}
         userDetails=userDetailsService.loadByEmail(user.getEmail());
-        if( userDetails!=null ){
+        if( userDetails.isPresent() ){
             result.rejectValue("email", "error.user", "Email is already in use");
             return "register";
         }
+        Optional<User> userPresent=userService.getUserByUsername(user.getUsername());
 
-//        if(userService!=null){
-//
-//            System.out.println("vero");
-//        }
-//        else{
-//            System.out.println("null ");
-//        }
+        if (userPresent.isPresent()){
+            result.rejectValue("username", "error.user", "This username is taken");
+            return "register";
+        }
 
+        
         userService.saveUser(user);
         return "/login";
     }

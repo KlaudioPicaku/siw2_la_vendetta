@@ -81,4 +81,17 @@ public class ReviewPublic {
     public void setReviewRating(int reviewRating) {
         this.reviewRating = reviewRating;
     }
+
+    @Override
+    public String toString() {
+        return "ReviewPublic{" +
+                "reviewId=" + reviewId +
+                ", reviewTitle='" + reviewTitle + '\'' +
+                ", reviewBody='" + reviewBody + '\'' +
+                ", reviewAuthor='" + reviewAuthor + '\'' +
+                ", reviewRating=" + reviewRating +
+                ", reviewPic='" + reviewPic + '\'' +
+                ", film=" + film +
+                '}';
+    }
 }

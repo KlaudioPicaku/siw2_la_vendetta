@@ -11,9 +11,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -144,20 +148,25 @@ public class AdminController {
 
     @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @GetMapping("/reviews/delete_confirm")
-    public String confirmDeleteReview(@RequestParam("id")Long id,Model model){
+    public String confirmDeleteReview(@RequestParam("id")Long id, Model model, RedirectAttributes redirectAttributes,HttpSession session, HttpServletRequest request){
         Optional<Review> review= reviewService.findById(id);
+
         if(!review.isPresent()){
             return "error/404";
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        User user=userService.getUserByUsername(auth.getName());
+        Optional<User> user=userService.getUserByUsername(auth.getName());
+
+        if(!user.isPresent()){
+            return "error/404";
+        }
 
         boolean isAdmin=auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .anyMatch(role -> role.equals("ROLE_ADMIN"));
 
-        if(!(user.getUsername().equals(review.get().getuser().getUsername())) && !isAdmin){
+        if(!(user.get().getUsername().equals(review.get().getuser().getUsername())) && !isAdmin){
             return "error/403";
         }
         Review reviewdto=review.get();
@@ -165,29 +174,46 @@ public class AdminController {
                 reviewdto.getuser().getUsername(),reviewdto.getRating(),reviewdto.getuser().getImage()
                 ,reviewdto.getId(),reviewdto.getFilm());
         model.addAttribute("object", reviewPublic);
+
+        String referer = request.getHeader("Referer");
+        if (referer != null) {
+            session.setAttribute("previousUrl", referer);
+        }
+
+        System.out.println(session.getAttribute("previousUrl").toString());
         return "review_delete_confirm";
 
     }
     @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @PostMapping("/reviews/delete")
-    public String deleteReview(@RequestParam("id")Long id){
+    public String deleteReview(@RequestParam("id")Long id, HttpSession session, HttpServletRequest request){
         Optional<Review> review= reviewService.findById(id);
+        String previousUrl = (String) session.getAttribute("previousUrl");
+//        String previousUrl = (String) redirectAttributes.getFlashAttributes().get("previousUrl");
+        System.out.println(previousUrl);
         if(!review.isPresent()){
             return "error/404";
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        User user=userService.getUserByUsername(auth.getName());
+        Optional<User> user=userService.getUserByUsername(auth.getName());
 
         boolean isAdmin=auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .anyMatch(role -> role.equals("ROLE_ADMIN"));
 
-        if(!(user.getUsername().equals(review.get().getuser().getUsername())) && !isAdmin){
+        if(user.isPresent() && !(user.get().getUsername().equals(review.get().getuser().getUsername())) && !isAdmin){
             return "error/403";
         }
         reviewService.delete(review.get().getId());
-        return "redirect: /review/list_view?page=1&film=&rating=&order=";
+
+        if (previousUrl != null) {
+            session.removeAttribute("previousUrl");
+            return "redirect:" + previousUrl;
+        }
+
+
+        return "redirect:/review/list_view?page=1&film=&rating=&order=";
     }
 
 }

@@ -14,4 +14,8 @@ public interface ActorService {
     void delete(Long id);
 
 
+    void deleteActorImage(String imagePath);
+
+
+    List<Actor> findByFilm(Film film);
 }

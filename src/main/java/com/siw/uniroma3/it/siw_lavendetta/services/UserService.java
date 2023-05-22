@@ -4,10 +4,20 @@ import com.siw.uniroma3.it.siw_lavendetta.dto.UserDto;
 import com.siw.uniroma3.it.siw_lavendetta.models.User;
 import com.siw.uniroma3.it.siw_lavendetta.models.tokens.VerificationToken;
 
+import java.util.Optional;
+
 public interface UserService {
     VerificationToken generateVerificationToken(User user);
-    User getUserByUsername(String username);
+    Optional<User> getUserByUsername(String username);
     void saveUser(UserDto user);
 
     void save(User user);
+
+    Optional<User> getUserByEmail(String email);
+
+    Optional<User> getUserById(Long id);
+
+    void updateUser(User user, String password);
+
+    boolean deletePreviousImage(User user);
 }

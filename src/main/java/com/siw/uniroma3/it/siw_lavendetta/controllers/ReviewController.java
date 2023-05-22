@@ -1,5 +1,6 @@
 package com.siw.uniroma3.it.siw_lavendetta.controllers;
 
+import com.siw.uniroma3.it.siw_lavendetta.constants.StaticURLs;
 import com.siw.uniroma3.it.siw_lavendetta.dto.FilmRating;
 import com.siw.uniroma3.it.siw_lavendetta.dto.ReviewDto;
 import com.siw.uniroma3.it.siw_lavendetta.models.Film;
@@ -65,10 +66,12 @@ public class ReviewController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        User user=  userService.getUserByUsername(authentication.getName());
+        Optional<User> user=  userService.getUserByUsername(authentication.getName());
         Optional<Film> film= filmService.findById(reviewDto.getFilmId());
-        if (film != null && user != null) {
-            Review review = new Review(reviewDto.getTitle(), reviewDto.getRating(), reviewDto.getBody(), user, film.get());
+        if (film != null && user.isPresent()) {
+
+            Review review = new Review(reviewDto.getTitle(), reviewDto.getRating(), reviewDto.getBody(), user.get(), film.get());
+            System.out.println(review.toString());
             reviewService.save(review);
             System.out.println(review.toString());
 

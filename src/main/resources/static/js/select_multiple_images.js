@@ -18,7 +18,7 @@ $(document).ready(function() {
         var deselectButton = $('<button>').addClass('btn btn-danger').text('X');
         deselectButton.on('click', function() {
           var selectedImageContainer = $(this).parent();
-          var selectedFile = selectedImageContainer.data('file'); // Get the associated file object
+          var selectedFile = selectedImageContainer.data('file'); // Prendi file Associato
           selectedImageContainer.remove();
           removeFileFromInput(selectedFile);
         });

@@ -9,6 +9,7 @@ import com.siw.uniroma3.it.siw_lavendetta.repositories.UserRepository;
 import com.siw.uniroma3.it.siw_lavendetta.repositories.tokens.VerificationTokenRepository;
 import com.siw.uniroma3.it.siw_lavendetta.services.ReviewService;
 import com.siw.uniroma3.it.siw_lavendetta.services.UserService;
+import com.siw.uniroma3.it.siw_lavendetta.services.tokens.PasswordResetTokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,8 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 public class AppConfig {
     @Bean
-    public UserService userService(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, EmailServiceImpl emailService) {
-        return new UserServiceImpl(userRepository, new BCryptPasswordEncoder(), verificationTokenRepository, emailService);
+    public UserService userService(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, EmailServiceImpl emailService, PasswordResetTokenService passwordResetTokenService) {
+        return new UserServiceImpl(userRepository, new BCryptPasswordEncoder(), verificationTokenRepository, emailService,passwordResetTokenService);
     }
 
     @Bean

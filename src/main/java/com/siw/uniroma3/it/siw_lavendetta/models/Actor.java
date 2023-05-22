@@ -5,7 +5,10 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "actor")
@@ -29,6 +32,8 @@ public class Actor {
 
     @Column(name = "image",nullable = true)
     private String image;
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "actors")
+    private Set<Film> films = new HashSet<>();
 
 
     // costruttori, getter, setter, equals, hashCode, toString
@@ -108,10 +113,35 @@ public class Actor {
     public String getFullName(){
         return this.firstName + " " +this.lastName;
     }
+
+    public String getLifeSpan(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedBirthDate = this.birthDate.format(formatter);
+        String formattedDeathDate = this.deathDate != null ? this.deathDate.format(formatter) : "";
+        if(formattedDeathDate.isEmpty()){
+            return formattedBirthDate;
+        }
+        String formattedDates = formattedBirthDate + "-" + formattedDeathDate;
+        return formattedDates;
+    }
     @Transient
     public String getImagePath() {
         if (this.image == null || id == null) return null;
 
         return "/"+ DefaultSaveLocations.DEFAULT_ACTORS_IMAGE_SAVE + this.image;
+    }
+    @Transient
+    public String getAbsoluteImageUrl() {
+        if (this.image == null || id == null) return null;
+
+        return DefaultSaveLocations.DEFAULT_ACTORS_IMAGE_SAVE + this.image;
+    }
+
+    public Set<Film> getFilms() {
+        return this.films;
+    }
+
+    public void addFilm(Film film) {
+        this.films.add(film);
     }
 }

@@ -19,9 +19,12 @@ function loadReviews() {
         console.log(response)
         for (var i = 0; i < response.length; i++) {
           var reviewId = response[i].reviewId;
+          console.log(reviewId);
+          console.log(response[i].reviewPic)
 
           // Check the ID
           if (!$container.find(`[data-review-id="${response[i].reviewId}"]`).length) {
+          console.log("true");
             var $review = $(`
               <div class="review-entry-container rounded p-3 bg-light" data-review-id="${response[i].reviewId}">
                 <div class="row">
@@ -48,11 +51,14 @@ function loadReviews() {
       },
       error: function() {
         isLoading = false; // Reset the loading flag in case of an error
-      }
+      },
+      complete: function() {
+           isLoading = false;
+              // Attach the scroll event listener to the reviews container
+              console.log("is loading ", isLoading);
+
+        }
     });
-    isLoading = false;
-    // Attach the scroll event listener to the reviews container
-    console.log("is loading ", isLoading);
 
     if ($("#reviewsContainer").length > 0 && $('.review-entry-container').length < (parseInt($('#review_counter').text())) && (parseFloat($('#review_counter').text())) / 10 > page) {
       page++;

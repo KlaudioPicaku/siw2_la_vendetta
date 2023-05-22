@@ -56,10 +56,7 @@ public class DirectorServiceImpl implements DirectorService {
         directorRepository.save(director);
     }
 
-    @Override
-    public void delete(Long id) {
-        directorRepository.deleteById(id);
-    }
+
 
     @Override
     public void deleteDirectorImage(String absoluteImageUrl) {
@@ -80,5 +77,11 @@ public class DirectorServiceImpl implements DirectorService {
                 e.printStackTrace();
             }
         }
+    }
+    @Override
+    public void delete(Long id) {
+        Director director=directorRepository.findById(id).get();
+        this.deleteDirectorImage(director.getAbsoluteImageUrl());
+        directorRepository.deleteById(id);
     }
 }

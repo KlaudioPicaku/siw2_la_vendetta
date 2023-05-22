@@ -73,7 +73,7 @@
                     <div class="d-flex flex-row align-items-center mb-4">
                       <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0">
-                        <input type="password" id="confirm_password" class="form-control" required />
+                        <input type="password" id="confirm_password" class="form-control" th:field="*{user.confirmPassword}" required />
                         <label class="form-label" for="confirm_password">Repeat your password</label>
                       </div>
                     </div>

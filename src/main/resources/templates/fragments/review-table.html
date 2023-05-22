@@ -4,36 +4,49 @@
 <body>
 <div th:fragment="review-table(reviews,films,currentFilm,maxNumberOfPages,page,currentRating,currentOrdering)">
 <!--    <p th:text="${currentRating}"></p>-->
-    <form id="reviewTableFilters" method="get" action="/review/list_view">
-        <input type="hidden" name="page" value="1">
-        <label style="color:white" for="filmId">Film:</label>
-        <select class="select" id="filmId" name="film">
-            <option value="">All Films</option>
-            <option th:each="film : ${films}" th:value="${film.getId()}" th:text="${film.getTitle()}"
-                    th:selected="${currentFilm != null and film.getId() == currentFilm.getId()}"></option>
-        </select>
-        <label style="color:white" for="rating">Rating:</label>
-        <select class="form-select" id="rating" name="rating">
-            <option value="">All Ratings</option>
-            <option value="1" th:selected="${currentRating == 1}">1 Star</option>
-            <option value="2" th:selected="${currentRating == 2}">2 Stars</option>
-            <option value="3" th:selected="${currentRating == 3}">3 Stars</option>
-            <option value="4" th:selected="${currentRating == 4}">4 Stars</option>
-            <option value="5" th:selected="${currentRating == 5}">5 Stars</option>
-        </select>
-        <label style="color:white" for="order">Order:</label>
-        <select class="form-select" id="order" name="order">
-            <option value="">Original Order</option>
-            <option value="desc" th:selected="${currentOrdering == 'desc'}">Descending</option>
-            <option value="asc" th:selected="${currentOrdering == 'asc'}">Ascending</option>
-        </select>
-        <button class="btn btn-success mt-2" type="submit">Filter</button>
+    <form id="reviewTableFilters" method="get" action="">
+        <div class="row">
+            <div class="col-md-3">
+                <input type="hidden" name="page" value="1">
+                <label style="color:white" for="filmId">Film:</label>
+                <select class="select" id="filmId" name="film">
+                    <option value="">All Films</option>
+                    <option th:each="film : ${films}" th:value="${film.getId()}" th:text="${film.getTitle()}"
+                            th:selected="${currentFilm != null and film.getId() == currentFilm.getId()}"></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label style="color:white" for="rating">Rating:</label>
+                    <select class="form-select" id="rating" name="rating">
+                        <option value="">All Ratings</option>
+                        <option value="1" th:selected="${currentRating == 1}">1 Star</option>
+                        <option value="2" th:selected="${currentRating == 2}">2 Stars</option>
+                        <option value="3" th:selected="${currentRating == 3}">3 Stars</option>
+                        <option value="4" th:selected="${currentRating == 4}">4 Stars</option>
+                        <option value="5" th:selected="${currentRating == 5}">5 Stars</option>
+                    </select>
+            </div>
+            <div class="col-md-3">
+                <label style="color:white" for="order">Order:</label>
+                    <select class="form-select" id="order" name="order">
+                        <option value="">Original Order</option>
+                        <option value="desc" th:selected="${currentOrdering == 'desc'}">Descending</option>
+                        <option value="asc" th:selected="${currentOrdering == 'asc'}">Ascending</option>
+                    </select>
+            </div>
+            <div class="col-md-3 mt-4">
+                <button class="btn btn-success mt-2" type="submit">Filter</button>
+            </div>
+        </div>
+
     </form>
     <br>
     <table class="slidDown table" style="color:white">
         <thead>
         <tr>
-            <th scope="col">id</th>
+            <div th:if="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+                <th scope="col">id</th>
+            </div>
             <th scope="col">Author</th>
             <th scope="col">Title</th>
             <th scope="col">Body</th>
@@ -51,7 +64,9 @@
             </td>
         </tr>
         <tr class="slideDown" th:each="review: ${reviews}">
-            <td th:text="${review.getReviewId()}"></td>
+            <div th:if="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+                <td th:text="${review.getReviewId()}"></td>
+            </div>
             <td th:text="${review.getReviewAuthor()}"></td>
             <td th:text="${review.getReviewTitle()}"></td>
             <td style="word-break: break-all;" th:text="${review.getReviewBody()}"></td>
@@ -60,7 +75,16 @@
                 <span class="star">&#9733;</span>
                 <span class="rating-value text-white" style="color:white" th:text="${review.getReviewRating()}+'/5'"></span>
             </td>
-            <td><a  id="delete_review" class="btn btn-danger" th:href="@{'/reviews/delete_confirm?id=' + ${review.getReviewId()}}">Delete</a></td>
+            <td>
+                <div class="d-flex">
+                    <div th:if="${#httpServletRequest != null and (#httpServletRequest.isUserInRole('ROLE_ADMIN')) or (#httpServletRequest.userPrincipal != null and #httpServletRequest.userPrincipal.name == review.getReviewAuthor())}">
+                        <a id="delete_review" class="btn btn-danger" th:href="@{'/reviews/delete_confirm?id=' + ${review.getReviewId()}}"><i class="bi bi-trash"></i></a>
+                    </div>
+                    <div th:if="${#httpServletRequest.userPrincipal != null and #httpServletRequest.userPrincipal.name == review.getReviewAuthor()}">
+                        <a id="edit_review" class="btn btn-warning" th:href="@{'/reviews/edit?id=' + ${review.getReviewId()}}"><i class="bi bi-pencil-square"></i></a>
+                    </div>
+                </div>
+            </td>
         </tr>
         </tbody>
     </table>

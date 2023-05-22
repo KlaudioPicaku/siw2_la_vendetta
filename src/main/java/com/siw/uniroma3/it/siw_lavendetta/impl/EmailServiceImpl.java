@@ -46,4 +46,28 @@ public class EmailServiceImpl implements EmailService {
             System.out.println("ERRORE INVIO MAIL, errore a runtime, S K I P Z ! " + e);
         }
     }
+
+    @Override
+    public void sendPasswordResetEmail(String to, String subject, String text) throws MessagingException {
+        MimeMessage message = emailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(to);
+            helper.setSubject(subject);
+            Resource resource = new ClassPathResource(MailSubjects.PATH_TO_RESET_MAIL_HTML_TEMPLATE.get(subject));
+            String emailContent = new String(Files.readAllBytes(resource.getFile().toPath()), StandardCharsets.UTF_8);
+            emailContent = emailContent.replace("{passwordToken}", text);
+
+            System.out.println("------------");
+
+            System.out.println(to);
+            System.out.println(emailContent);
+            System.out.println("------------");
+            helper.setFrom("noreply@pictureperfect.com");
+            helper.setText(emailContent, true);
+            emailSender.send(message);
+        }catch (MessagingException | IOException e){
+            System.out.println("ERRORE INVIO MAIL, errore a runtime, S K I P Z ! " + e);
+        }
+    }
 }

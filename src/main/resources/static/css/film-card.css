@@ -39,10 +39,58 @@
 
 .modern-link {
     text-decoration: none;
+    text-decoration-color: white;
     color: #fff;
     text-align: center;
 }
+.container-scroll {
+  overflow: hidden;
+  position: relative;
+}
 
+.scroll-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Disable standard scroll bar */
+  -ms-overflow-style: none;
+}
+.scroll-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+
+.row-scroll {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-right: -10px;
+  margin-left: -10px;
+}
+
+.scroll-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background-color: #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.scroll-button.previous {
+  left: 10px;
+}
+
+.scroll-button.next {
+  right: 10px;
+}
 .film-title {
     font-size: 16px;
     white-space: nowrap;

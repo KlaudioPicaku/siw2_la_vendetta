@@ -1,20 +1,19 @@
 package com.siw.uniroma3.it.siw_lavendetta.impl;
 
-import com.siw.uniroma3.it.siw_lavendetta.models.Director;
-import com.siw.uniroma3.it.siw_lavendetta.models.Film;
-import com.siw.uniroma3.it.siw_lavendetta.models.FilmDescription;
-import com.siw.uniroma3.it.siw_lavendetta.models.FilmImage;
+import com.siw.uniroma3.it.siw_lavendetta.models.*;
 import com.siw.uniroma3.it.siw_lavendetta.repositories.*;
 import com.siw.uniroma3.it.siw_lavendetta.services.FilmDescriptionService;
 import com.siw.uniroma3.it.siw_lavendetta.services.FilmService;
+import com.siw.uniroma3.it.siw_lavendetta.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
 
 @Service
 @Qualifier("filmServiceImpl")
@@ -23,6 +22,9 @@ public class FilmServiceImpl implements FilmService {
 
     @Autowired
     private FilmRepository filmRepository;
+
+    @Autowired
+    private ReviewService reviewService;
 
     @Autowired
     private FilmDescriptionRepository filmDescriptionRepository;
@@ -36,6 +38,10 @@ public class FilmServiceImpl implements FilmService {
     private ActorRepository actorRepository;
     @Autowired
     private DirectorRepository directorRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
 
 
     @Override
@@ -63,12 +69,66 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public void delete(Long id) {
-        filmRepository.deleteById(id);
+
+//        List<Review> reviews= reviewRepository.findAllByFilm(filmRepository.findById(id).get());
+//        for(Review r : reviews){
+//            reviewRepository.delete(r);
+//        }
+        Film film = filmRepository.findById(id).get();
+        film.clearActors();
+        filmRepository.delete(film);
     }
 
     @Override
     public List<Film> findByDirector(Director director){
         return filmRepository.findByDirector(director);
+    }
+
+    @Override
+    public String getAverageRating(Film film) {
+        List<Review> reviews = reviewService.findAllByFilm(film);
+        OptionalDouble averageRating = reviews.stream()
+                .mapToDouble(Review::getRating)
+                .average();
+
+        if (averageRating.isPresent()) {
+            double average = averageRating.getAsDouble();
+
+            return String.valueOf( Math.round(average*100.0)/100.0);
+        }
+
+        return "No Ratings";
+    }
+
+    @Override
+    public Double getAveragDoubleRating(Film film) {
+        List<Review> reviews = reviewService.findAllByFilm(film);
+        OptionalDouble averageRating = reviews.stream()
+                .mapToDouble(Review::getRating)
+                .average();
+        if(averageRating.isPresent()){
+            return (Math.round(averageRating.getAsDouble()*100.0)/100.0);
+
+        }
+        return null;
+    }
+
+
+    @Override
+    public List<Film> findByActor(Actor actor) {
+        return filmRepository.findByActorsContaining(actor);
+    }
+
+    @Override
+    public List<Film> findTopThree() {
+        List<Film> films = this.findAll();
+        //tenendo conto che getAverageDouble può ritornare null, in quel caso la media delle review sarà 0
+        films.sort(Comparator.comparingDouble(film -> {
+            Double averageRating = getAveragDoubleRating((Film) film);
+            return (averageRating != null) ? averageRating : 0.0;
+        }).reversed());
+
+        return films.subList(0, Math.min(films.size(), 3));
     }
 
     public String filmDescriptionByFilm(Film film){

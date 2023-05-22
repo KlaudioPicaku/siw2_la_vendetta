@@ -19,6 +19,8 @@ public class UserDto {
     @ValidPassword
     private String password;
 
+    private String confirmPassword;
+
     @NotEmpty
     private String firstName;
 
@@ -87,5 +89,9 @@ public class UserDto {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';
+    }
+
+    public String getConfirmPassword() {
+        return  this.confirmPassword;
     }
 }

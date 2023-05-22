@@ -26,4 +26,10 @@ public interface ReviewService {
     List<Review> findAllByRating(Integer rating);
 
     Optional<Review> findById(Long id);
+
+    List<Review> findAllByFilmAndUser(Film film, Optional<User> user);
+
+    List<Review> findAllByRatingAndUser(Integer rating, Optional<User> user);
+
+    List<Review> findAllByUserAndRatingForFilm(Film film, Integer rating, Optional<User> user);
 }

@@ -1,9 +1,21 @@
 function starryNight() {
+  // valore corrente della review
+  var currentRating = parseInt($('#rating').val());
+
+  // valore iniziale
+  $('.star-rating .star').removeClass('yellow');
+  $('.star-rating .star').each(function() {
+    var rating = $(this).data('rating');
+    if (rating <= currentRating) {
+      $(this).addClass('yellow');
+    }
+  });
+
   $('.star-rating .star').click(function() {
     var rating = $(this).data('rating');
     $('#rating').val(rating);
 
-    // cambia il colore
+    // Cambia il colore
     $('.star-rating .star').removeClass('yellow');
     $(this).addClass('yellow');
     $(this).prevAll().addClass('yellow');
@@ -38,6 +50,7 @@ function loadReviewModal() {
 
       if ($("#modal-overlay").length > 0) {
         console.log("Reviews modal is loaded already");
+        loadReviews();
         $("#modal-overlay").fadeIn();
       } else {
         $("#reviewModal").html(response);
@@ -50,6 +63,7 @@ function loadReviewModal() {
         $('#load_more_reviews').click(function () {
             console.log("click");
             if ($('.review-entry-container').length < parseInt($('#review_counter').text())) {
+              isLoading=false;
               loadReviews();
             }
           });
@@ -58,6 +72,7 @@ function loadReviewModal() {
     error: function (xhr, status, error) {
       console.log(error);
     }
+
   });
 
 }

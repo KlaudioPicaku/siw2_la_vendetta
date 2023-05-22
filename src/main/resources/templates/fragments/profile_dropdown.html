@@ -4,11 +4,11 @@
 <div th:fragment="profile_dropdown">
     <div class="dropdown">
         <button class="btn btn-outline-success rounded-pill dropdown-toggle" type="button" id="profile_dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img th:src="@{${profile_pic} ?: '/static/images/default_profile_pic.webp'}"  class="rounded-left mr-2" width="28" height="28" alt="Profile Image" />
+            <img id="profile_picture" class="fadeIn rounded-left mr-2" width="28" height="28" />
             <span class="profile-name ml-2" th:text="${#httpServletRequest.userPrincipal?.name}"></span>
         </button>
         <div class="dropdown-menu text-align-right" id="profile_dropdown_menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" href="/profile?page=1&film=&rating=&order=">
                 <i class="bi bi-person-fill text-secondary me-2">Profile</i>
             </a>
             <div th:if="${#httpServletRequest != null and #httpServletRequest.isUserInRole('ROLE_ADMIN')}">

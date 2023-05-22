@@ -15,7 +15,7 @@
         <label for="releaseYear" style="color:white">Release Year:</label>
         <input type="number" id="releaseYear" class="form-control" th:field="*{film.releaseYear}" required />
         <label for="film_description_body" style="color:white">Film Description:</label>
-        <textarea id="film_description_body" rows="4" maxlength="1764" class="form-control" th:field="*{filmDescription.body}" required />
+        <textarea id="film_description_body" rows="4" maxlength="4000" class="form-control" th:field="*{filmDescription.body}" required />
         <label for="director" style="color:white">Director:</label>
         <select class="select" id="director" name="director" th:field="*{film.director}" required>
           <option value=" "></option>

@@ -77,4 +77,19 @@ public class ReviewServiceImpl implements ReviewService {
     public Optional<Review> findById(Long id) {
         return reviewRepository.findById(id);
     }
+
+    @Override
+    public List<Review> findAllByFilmAndUser(Film film, Optional<User> user) {
+        return reviewRepository.findAllByUserAndFilm(user.get(), Optional.ofNullable(film));
+    }
+
+    @Override
+    public List<Review> findAllByRatingAndUser(Integer rating, Optional<User> user) {
+       return reviewRepository.findAllByUserAndRating(user.get(),rating);
+    }
+
+    @Override
+    public List<Review> findAllByUserAndRatingForFilm(Film film, Integer rating, Optional<User> user) {
+        return reviewRepository.findAllByUserAndRatingAndFilm(user.get(),rating,film);
+    }
 }

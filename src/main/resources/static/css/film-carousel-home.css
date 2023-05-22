@@ -1,0 +1,39 @@
+#film-carousel-home {
+  height: 400px;
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-inner {
+  height: 100%;
+}
+
+.carousel-item-home {
+            position: relative;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .carousel-item-img {
+           position: absolute;
+             top: 50%;
+             left: 50%;
+             transform: translate(-50%, -50%);
+             max-width: 100%;
+             max-height: 100%;
+             width: auto; /* Allow the image to shrink if necessary */
+             height: auto; /* Same function */
+             object-fit: contain; /* Scale down the image while maintaining aspect ratio */
+             z-index: 1; /* Bring the foreground image to the front */
+        }
+
+        .carousel-item-blur {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            filter: blur(8px);
+        }

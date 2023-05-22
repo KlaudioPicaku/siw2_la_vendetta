@@ -10,6 +10,8 @@ import com.siw.uniroma3.it.siw_lavendetta.services.FilmService;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -39,13 +41,16 @@ public class Film {
             joinColumns = @JoinColumn(name = "film_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id"))
     private Set<Actor> actors = new HashSet<>();
-
     @OneToMany(mappedBy = "film",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<FilmImage> images = new HashSet<>();
 
+    @OneToOne(mappedBy="film",cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "film_id")
+    private FilmDescription filmDescription;
 
-    @Transient
-    private final FilmServiceImpl filmService=new FilmServiceImpl();
+    @OneToMany(mappedBy = "film", cascade = CascadeType.REMOVE)
+    private List<Review> reviews;
+
 
 
     public Film(){}
@@ -134,7 +139,9 @@ public class Film {
 //        image.setFilm(null);
 //    }
 
-
+    public void clearActors(){
+        this.actors.clear();
+    }
     @Override
     public String toString(){
         return  this.getTitle()+"("+this.getReleaseYear()+")";
@@ -142,13 +149,23 @@ public class Film {
 
     public String getAbsoluteUrl(){ return StaticURLs.FILM_DETAIL_URL+this.getId(); }
     @Transient
-    public Set<FilmImage> getImages(){
-        return this.images;
+    public List<FilmImage> getImages() {
+        List<FilmImage> sortedImages = new ArrayList<>(this.images);
+
+        Collections.sort(sortedImages, Comparator.comparing(FilmImage::getId,
+                Comparator.nullsFirst(Comparator.naturalOrder())));
+
+        return sortedImages;
     }
 
     @Transient
     public String getCoverPath() {
-        Optional<FilmImage> filmImage = this.images.stream().findFirst();
+        List<FilmImage> sortedImages = new ArrayList<>(this.images);
+
+        Collections.sort(sortedImages, Comparator.comparing(FilmImage::getId,
+                Comparator.nullsFirst(Comparator.naturalOrder())));
+        Optional<FilmImage> filmImage = sortedImages.stream().findFirst();
+
         if (!filmImage.isPresent() || id == null) return null;
 
         return "/"+ DefaultSaveLocations.DEFAULT_FILMS_IMAGE_SAVE + filmImage.get().getFilePath();

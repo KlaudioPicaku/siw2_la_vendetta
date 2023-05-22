@@ -13,7 +13,7 @@ public class FilmDescription {
     @JoinColumn(name = "film_id", nullable = false)
     private Film film;
 
-    @Column(name = "body", nullable = false, length = 1764)
+    @Column(name = "body", nullable = false, length = 4000)
     private String body;
     public FilmDescription(){
 

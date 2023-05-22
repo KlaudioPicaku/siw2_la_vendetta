@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="contentTemplate='film-carousel-home'">
+
+<body>
+<div id="film-carousel-home" class="carousel slide" data-bs-ride="carousel" th:fragment="film-carousel-home(carouselFilms)">
+    <div class="carousel-indicators">
+      <th:block th:each="entry, stat : ${carouselFilms}">
+        <button type="button" data-bs-target="#film-carousel-home" th:data-bs-slide-to="${stat.index}" th:attr="aria-current=${stat.index == 0 ? 'true' : 'false'},class=${stat.index == 0 ? 'active' : ' '}, aria-label='Slide ' + (${stat.index + 1})"></button>
+      </th:block>
+    </div>
+    <div class="carousel-inner">
+      <th:block th:each="entry, stat : ${carouselFilms}">
+        <div class="carousel-item" th:classappend="${stat.index == 0 ? 'active' : ''}">
+          <img th:src="${entry.key.getCoverPath()}" class="d-block w-100 carousel-item-img" alt="Film Image">
+        </div>
+      </th:block>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#film-carousel-home" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#film-carousel-home" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
+</body>
+</html>

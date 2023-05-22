@@ -4,37 +4,19 @@
   <meta name="_csrf" th:content="${_csrf.token}">
   <meta name="_csrf_header" th:content="${_csrf.headerName}">
   <input type="hidden" id="filmId" name="film" th:value="${film.getId()}">
-
-  <!-- Film Carousel -->
-  <div id="film-carousel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <th:block th:each="image, stat : ${film.getImages()}">
-        <button type="button" data-bs-target="#film-carousel" th:data-bs-slide-to="${stat.index}" th:attr="aria-current=${stat.index == 0 ? 'true' : 'false'},class=${stat.index == 0 ? 'active' : ' '}, aria-label='Slide ' + (${stat.index + 1})"></button>
-      </th:block>
-    </div>
-    <div class="carousel-inner">
-      <th:block th:each="image, stat : ${film.getImages()}">
-        <div class="carousel-item" th:classappend="${stat.index == 0 ? 'active' : ''}">
-          <img th:src="${image.getUrl()}" class="d-block w-100 carousel-item-img" alt="Film Image">
-        </div>
-      </th:block>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#film-carousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#film-carousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
+  <h3 style="color:white;" th:text="${film.getTitle()} +'('+${film.getReleaseYear()}+')'"></h3>
+  <div class="col-md-3" style="text-align: left;">
+    <a class="modern-link" th:href="'/director/detail?id=' + ${film.getDirector().getId()}">
+      <i style="color: white;" th:text="'by: ' + ${film.getDirector().getFullName()}"></i>
+    </a>
   </div>
-
+  <!-- Film Carousel -->
+  <div th:replace="fragments/film-carousel :: film-carousel(${film})"></div>
   <!-- Film Rating and Review Section -->
   <div class="row mt-4">
     <div class="col-md-10">
       <!-- Check if user is logged in -->
       <!-- If not logged in, show login or sign up message -->
-      <!-- Example: Use Thymeleaf's `sec:authorize` for authentication -->
       <div th:if="${reviewLeft}">
         <p-dark id="review_left">Thanks for reviewing this movie!</p-dark>
       </div>
@@ -46,9 +28,9 @@
       </div>
       <div th:if="${#httpServletRequest != null and (#httpServletRequest.isUserInRole('ROLE_ADMIN'))}">
           <a  id="edit_film" class="btn btn-warning" th:href="@{'/admin/film/edit?id=' + ${film.getId()}}">Edit</a>
+          <a  id="delete_film" class="btn btn-danger" th:href="@{'/admin/film/delete_confirm?id=' + ${film.getId()}}">Delete</a>
       </div>
       <!-- If logged in, show review form -->
-      <!-- Example: Use Thymeleaf's `sec:authorize` for authentication -->
     </div>
     <div class="col-md-2">
       <div>
@@ -62,7 +44,6 @@
           </a>
         </div>
         <div id="reviewModal"></div>
-        <!-- Add logic to display the actual rating value for the film -->
       </div>
 
     </div>

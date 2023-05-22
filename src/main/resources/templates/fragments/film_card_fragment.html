@@ -2,16 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org" th:with="contentTemplate='film_card_fragment'">
 
 <body>
-<div th:fragment="film-card(film)">
+<div th:fragment="film-card(entry)">
     <div class="film-card">
-        <img th:src="${film.getCoverPath()}" alt="Film Cover">
+        <img th:src="${entry.key.getCoverPath()}" alt="Film Cover">
         <div class="hover-content">
-            <a class="modern-link" th:href="@{'/film/detail?id=' + ${film.getId()}}">
-                <h3 class="film-title" th:text="${film.getTitle()}+'('+${film.getReleaseYear()+')'}"></h3>
-                <p-dark class="director" th:text="${film.getDirector().getFullName()}"></p-dark>
+            <a class="modern-link" th:href="@{'/film/detail?id=' + ${entry.key.getId()}}">
+                <h3 class="film-title" th:text="${entry.key.getTitle()}+'('+${entry.key.getReleaseYear()+')'}"></h3>
+                <p-dark class="director" th:text="${entry.key.getDirector().getFullName()}"></p-dark>
                 <div class="rating">
                     <span class="star">&#9733;</span>
-                    <span class="rating-value">4</span>
+                    <span class="rating-value" th:text="${entry.value}"></span>
                 </div>
             </a>
         </div>

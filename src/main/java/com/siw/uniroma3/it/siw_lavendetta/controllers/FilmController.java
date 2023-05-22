@@ -22,19 +22,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class FilmController {
@@ -127,10 +123,7 @@ public class FilmController {
         film.setId(filmId);
         filmDescription.setFilm(filmService.findById(filmId).get());
         ArrayList<Integer> removedImages= new ArrayList<>();
-//        for (MultipartFile image: images){
-//            System.out.println("immagini caricate: ");
-//            System.out.println(image.getOriginalFilename());
-//        }
+
         try {
             removedImages= JSONIntArrayStringtoArrayListConverter.convertJsonIntegerStringToIntegerArrayList(selectedImageIds);
         } catch (JsonProcessingException e) {
@@ -173,7 +166,7 @@ public class FilmController {
                 System.out.println("-------------------");
             }
 
-
+        filmRepository.save(film);
         return "redirect:/film/detail?id="+film.getId();
 //        return null;
     }
@@ -183,9 +176,15 @@ public class FilmController {
         Optional<Film> film=filmRepository.findById(id);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        User user= userRepository.findByUsername(authentication.getName());
+        Optional<User> user= userRepository.findByUsername(authentication.getName());
 
-        boolean reviewLeft= reviewRepository.findAllByUserAndFilm(user,film).size() > 0 ;
+
+
+        boolean reviewLeft= false;
+
+        if(user.isPresent()){
+                    reviewLeft= reviewRepository.findAllByUserAndFilm(user.get(),film).size() > 0 ;
+        }
 
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN") );
@@ -216,9 +215,32 @@ public class FilmController {
 
 //    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/films/list_view")
-    public String adminFilmList(Model model){
+    public String adminFilmList(@RequestParam("page")Integer page,
+                                Model model){
         List<Film> films = filmRepository.findAll();
-        model.addAttribute("films",films);
+        int pageSize = 10;
+        int startIndex = (page - 1) * pageSize;
+        int endIndex = Math.min(startIndex + pageSize, films.size());
+        List<Film> filmSubList;
+        if (startIndex <= endIndex) {
+            filmSubList=films.subList(startIndex, endIndex);
+        } else {
+            filmSubList= Collections.emptyList();
+        }
+        int maxNumberOfPages=0;
+        if(filmSubList.size()>0){
+            maxNumberOfPages=(int) Math.ceil((double) films.size() / pageSize);;
+        }
+        Map<Film, String> filmRatings = new HashMap<>();
+        filmSubList.stream().forEach(film ->{
+            String rating=filmService.getAverageRating(film);
+            filmRatings.put(film,rating);
+        });
+//        model.addAttribute("films", filmRatings);
+
+        model.addAttribute("films",filmRatings);
+        model.addAttribute("page",page);
+        model.addAttribute("maxNumberOfPages",maxNumberOfPages);
         return "admin_film_list";
     }
 
@@ -231,6 +253,28 @@ public class FilmController {
         model.addAttribute("directors",directors);
         model.addAttribute("actors",actors);
         return "admin_film_create";
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/film/delete_confirm")
+    public String adminFilmDeleteConfirm(@RequestParam("id") Long filmId, Model model){
+        Optional<Film> film=filmService.findById(filmId);
+        if(!film.isPresent()){
+            return "error/404";
+        }
+        model.addAttribute("object",film.get());
+        return  "film_delete_confirm";
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/admin/film/delete")
+    public String deleteFilm(@RequestParam("id") Long filmId){
+        Optional<Film> film=filmService.findById(filmId);
+
+        if(!film.isPresent()){
+            return "error/404";
+        }
+        filmService.delete(filmId);
+
+        return "redirect:/films/list_view?page=1";
     }
 
 //    @PreAuthorize("hasRole('ADMIN')")
@@ -285,7 +329,7 @@ public class FilmController {
             System.out.println("-------------------");
         }
 
-        return "redirect:/admin/films/list_view";
+        return "redirect:/films/list_view?page=1";
     }
 
 

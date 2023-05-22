@@ -41,8 +41,8 @@ public class Director {
     @Column(name = "foto",nullable = true)
     private String image;
 
-//    @OneToMany(mappedBy = "director")
-//    private Set<Film> films = new HashSet<>();
+    @OneToMany(mappedBy = "director", cascade = CascadeType.REMOVE)
+    private Set<Film> films;
 
     // costruttori, getter, setter, equals, hashCode, toString
     public Director(){
@@ -177,5 +177,6 @@ public class Director {
 
         return DefaultSaveLocations.DEFAULT_DIRECTORS_IMAGE_SAVE + this.image;
     }
+
 
 }

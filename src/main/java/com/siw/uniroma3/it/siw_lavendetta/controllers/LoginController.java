@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 public class LoginController {
@@ -33,21 +34,22 @@ public class LoginController {
 
     @PostMapping("/login")
     public String loginMethod(@Valid @ModelAttribute("user") UserDto userDto, BindingResult bindingResult, HttpSession session, Model model) {
-
         System.out.println("post eseguita");
         if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getAllErrors());
             return "login";
         }
 
-        User user = userService.getUserByUsername(userDto.getUsername());
+        Optional<User> user = userService.getUserByUsername(userDto.getUsername());
         System.out.println(user);
 
-        if (user == null || !userService.passwordMatch(user, userDto.getPassword())) {
+
+        if (!user.isPresent() || !userService.passwordMatch(user.get(), userDto.getPassword())) {
             model.addAttribute("loginError", true);
             return "login";
         }
 
-        if (!user.isEnabled()) {
+        if (!user.get().isEnabled()) {
             model.addAttribute("emailNotVerified", true);
             return "login";
         }
