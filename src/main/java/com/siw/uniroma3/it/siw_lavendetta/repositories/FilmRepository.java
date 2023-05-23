@@ -18,4 +18,6 @@ public interface FilmRepository extends JpaRepository<Film, Long> {
     List<Film> findByDirector(Director director);
 
     List<Film> findByActorsContaining(Actor actor);
+
+    List<Film> findAllByTitleContaining(String term);
 }

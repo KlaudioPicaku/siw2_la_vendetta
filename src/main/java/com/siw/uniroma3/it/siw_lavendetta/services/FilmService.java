@@ -25,4 +25,6 @@ public interface FilmService {
     List<Film> findByActor(Actor actor);
 
     List<Film> findTopThree();
+
+    List<Film> searchByTerm(String term);
 }

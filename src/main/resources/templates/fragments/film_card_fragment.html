@@ -6,9 +6,9 @@
     <div class="film-card">
         <img th:src="${entry.key.getCoverPath()}" alt="Film Cover">
         <div class="hover-content">
-            <a class="modern-link" th:href="@{'/film/detail?id=' + ${entry.key.getId()}}">
-                <h3 class="film-title" th:text="${entry.key.getTitle()}+'('+${entry.key.getReleaseYear()+')'}"></h3>
-                <p-dark class="director" th:text="${entry.key.getDirector().getFullName()}"></p-dark>
+            <a class="film-link" th:href="@{'/film/detail?id=' + ${entry.key.getId()}}">
+                <h3 class="modern-link" th:text="${entry.key.getTitle()}+'('+${entry.key.getReleaseYear()+')'}"></h3>
+                <p-dark class="director ml-4" th:text="${entry.key.getDirector().getFullName()}"></p-dark>
                 <div class="rating">
                     <span class="star">&#9733;</span>
                     <span class="rating-value" th:text="${entry.value}"></span>

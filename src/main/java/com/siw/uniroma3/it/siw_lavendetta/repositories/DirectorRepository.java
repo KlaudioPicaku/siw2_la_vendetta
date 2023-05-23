@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface DirectorRepository extends JpaRepository<Director,Long> {
     public List<Director> findByFirstNameContainingOrLastNameContaining(String firstName,String lastName);
+
+    List<Director> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String firstName,String lastName);
 }

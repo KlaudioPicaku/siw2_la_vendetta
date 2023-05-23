@@ -13,4 +13,6 @@ public interface DirectorService {
     void delete(Long id);
 
     void deleteDirectorImage(String absoluteImageUrl);
+
+    List<Director> searchByTerm(String term);
 }

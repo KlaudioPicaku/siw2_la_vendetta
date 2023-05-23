@@ -1,6 +1,7 @@
 package com.siw.uniroma3.it.siw_lavendetta.models;
 
 import com.siw.uniroma3.it.siw_lavendetta.constants.DefaultSaveLocations;
+import com.siw.uniroma3.it.siw_lavendetta.constants.StaticURLs;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
@@ -143,5 +144,9 @@ public class Actor {
 
     public void addFilm(Film film) {
         this.films.add(film);
+    }
+
+    public String getAbsoluteUrl() {
+        return StaticURLs.ACTOR_DETAIL_URL+this.getId();
     }
 }

@@ -3,6 +3,7 @@ package com.siw.uniroma3.it.siw_lavendetta.services;
 import com.siw.uniroma3.it.siw_lavendetta.dto.UserDto;
 import com.siw.uniroma3.it.siw_lavendetta.models.User;
 import com.siw.uniroma3.it.siw_lavendetta.models.tokens.VerificationToken;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
 import java.util.Optional;
 
@@ -20,4 +21,6 @@ public interface UserService {
     void updateUser(User user, String password);
 
     boolean deletePreviousImage(User user);
+
+    void processOAuth2User(OAuth2AuthenticationToken authenticationToken);
 }

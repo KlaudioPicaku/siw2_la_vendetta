@@ -11,6 +11,7 @@ public class StaticURLs {
 
     public static String LOCAL_HOST="http://localhost:8080";
     public static final String FILM_DETAIL_URL="/film/detail?id=";
+    public static final String ACTOR_DETAIL_URL="/actor/detail?id=";
 
 
     public static final String DIRECTOR_DETAIL_URL="/director/detail?id=";

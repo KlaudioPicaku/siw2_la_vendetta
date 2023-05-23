@@ -78,6 +78,12 @@ public class DirectorServiceImpl implements DirectorService {
             }
         }
     }
+
+    @Override
+    public List<Director> searchByTerm(String term) {
+        return  directorRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(term,term);
+    }
+
     @Override
     public void delete(Long id) {
         Director director=directorRepository.findById(id).get();

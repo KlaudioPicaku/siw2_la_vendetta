@@ -12,4 +12,6 @@ public interface ActorRepository extends JpaRepository<Actor, Long> {
     public List<Actor> findByFirstNameContainingOrLastNameContaining(String firstName, String lastName);
 
     List<Actor> findByFilmsContaining(Film film);
+
+    List<Actor> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String firstName,String lastName);
 }

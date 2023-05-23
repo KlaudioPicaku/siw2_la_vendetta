@@ -23,6 +23,7 @@
   z-index: 1; /* Bring the foreground image to the front */
 }
 
+
 .carousel-item::before {
   content: "";
   position: absolute;

@@ -103,6 +103,7 @@
 .director {
     font-size: 14px;
     color: #fff;
+    text-align: absolute;
 }
 
 .rating {

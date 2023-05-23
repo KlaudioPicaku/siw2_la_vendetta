@@ -22,10 +22,15 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <form class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
+                        <div class="search-bar">
+                            <form id="searchForm" method="get" action="/search">
+                            <input type="text" id="searchInput" placeholder="Search..." name="term">
+                                <input type="hidden" id="pageId" name="page" value="1">
+                            <button id="searchButton" class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+                            </form>
+                        </div>
+                        <div id="searchResults" class="dropdown-content"></div>
+
                     </li>
 <!--                    <li class="nav-item">-->
 <!--                        <button class="btn btn-secondary ml-3 mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Add New Movie">-->

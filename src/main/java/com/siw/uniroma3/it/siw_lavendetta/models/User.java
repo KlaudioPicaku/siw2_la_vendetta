@@ -55,10 +55,11 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
-
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
     public User() {}
 
-    public User(String username, String email, String password, String firstName, String lastName, String image) {
+    public User(String username, String email, String password, String firstName, String lastName, String image,Provider provider) {
         super();
         System.out.println("sto nel creatore ");
         this.username = username;
@@ -69,6 +70,7 @@ public class User implements UserDetails {
         this.image = image;
         this.enabled=false;
         this.isSuperuser=false;
+        this.provider=provider;
     }
 
     // getters and setters

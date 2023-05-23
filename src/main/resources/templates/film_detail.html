@@ -6,9 +6,7 @@
   <input type="hidden" id="filmId" name="film" th:value="${film.getId()}">
   <h3 style="color:white;" th:text="${film.getTitle()} +'('+${film.getReleaseYear()}+')'"></h3>
   <div class="col-md-3" style="text-align: left;">
-    <a class="modern-link" th:href="'/director/detail?id=' + ${film.getDirector().getId()}">
-      <i style="color: white;" th:text="'by: ' + ${film.getDirector().getFullName()}"></i>
-    </a>
+    <a class="modern-link" th:href="'/director/detail?id=' + ${film.getDirector().getId()}" style="font-style: italic" th:text="'by: ' + ${film.getDirector().getFullName()}" ></a>
   </div>
   <!-- Film Carousel -->
   <div th:replace="fragments/film-carousel :: film-carousel(${film})"></div>
@@ -56,7 +54,7 @@
     </div>
     <div class="col-md-2">
       <div>
-        <div th:replace="fragments/cast_fragment :: film-cast(${film.getActors()})"></div>
+        <div th:replace="fragments/cast_fragment :: film-cast(cast=${film.getActors()},film=${film})"></div>
       </div>
     </div>
 

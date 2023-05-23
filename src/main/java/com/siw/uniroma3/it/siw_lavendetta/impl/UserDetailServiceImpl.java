@@ -1,5 +1,7 @@
 package com.siw.uniroma3.it.siw_lavendetta.impl;
 
+import com.siw.uniroma3.it.siw_lavendetta.constants.GUIconstants;
+import com.siw.uniroma3.it.siw_lavendetta.models.Provider;
 import com.siw.uniroma3.it.siw_lavendetta.models.User;
 import com.siw.uniroma3.it.siw_lavendetta.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +13,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
+
 
     public Optional<User> loadByEmail(String email){
         return userRepository.findByEmail(email);
@@ -51,4 +56,18 @@ public class UserDetailServiceImpl implements UserDetailsService {
         return  new org.springframework.security.core.userdetails.User(user.get().getUsername(),user.get().getPassword(),authorities);
     }
 
+    public void processOAuthPostLogin(String username) {
+        Optional<User> existUser=userRepository.findByUsername(username);
+        BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+        if(!existUser.isPresent()){
+            String randomEncodedPassword= passwordEncoder.encode(UUID.randomUUID().toString().replaceAll("-",""));
+
+            User newUser=new User(username,username,randomEncodedPassword,username,username, GUIconstants.DEFAULT_PROFILE_PICTURE, Provider.GITHUB);
+            newUser.setEnabled(true);
+
+            userRepository.save(newUser);
+
+        }
+
+    }
 }

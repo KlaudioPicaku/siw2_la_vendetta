@@ -18,4 +18,6 @@ public interface ActorService {
 
 
     List<Actor> findByFilm(Film film);
+
+    List<Actor> searchByterm(String term);
 }

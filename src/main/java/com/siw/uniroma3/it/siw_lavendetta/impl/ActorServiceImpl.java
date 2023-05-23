@@ -81,5 +81,10 @@ public class ActorServiceImpl implements ActorService {
         return actorRepository.findByFilmsContaining(film);
     }
 
+    @Override
+    public List<Actor> searchByterm(String term) {
+        return actorRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(term,term);
+    }
+
 
 }

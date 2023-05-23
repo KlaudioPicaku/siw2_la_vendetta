@@ -131,6 +131,11 @@ public class FilmServiceImpl implements FilmService {
         return films.subList(0, Math.min(films.size(), 3));
     }
 
+    @Override
+    public List<Film> searchByTerm(String term) {
+        return filmRepository.findByTitleContainingIgnoreCase(term);
+    }
+
     public String filmDescriptionByFilm(Film film){
         Optional<FilmDescription> filmDescription=filmDescriptionService.findByFilmId(film.getId());
         if (filmDescription.isPresent()){

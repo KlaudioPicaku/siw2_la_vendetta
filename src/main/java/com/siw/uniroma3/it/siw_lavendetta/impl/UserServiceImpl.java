@@ -3,6 +3,7 @@ package com.siw.uniroma3.it.siw_lavendetta.impl;
 import com.siw.uniroma3.it.siw_lavendetta.constants.GUIconstants;
 import com.siw.uniroma3.it.siw_lavendetta.constants.MailSubjects;
 import com.siw.uniroma3.it.siw_lavendetta.dto.UserDto;
+import com.siw.uniroma3.it.siw_lavendetta.models.Provider;
 import com.siw.uniroma3.it.siw_lavendetta.models.User;
 import com.siw.uniroma3.it.siw_lavendetta.models.tokens.VerificationToken;
 import com.siw.uniroma3.it.siw_lavendetta.repositories.UserRepository;
@@ -11,6 +12,8 @@ import com.siw.uniroma3.it.siw_lavendetta.services.UserService;
 import com.siw.uniroma3.it.siw_lavendetta.services.tokens.PasswordResetTokenService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -59,9 +62,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUser(@org.jetbrains.annotations.NotNull UserDto user){
         String encodedPassword = passwordEncoder.encode(user.getPassword());
-        User newUser=new User(user.getUsername(),user.getEmail(),encodedPassword,user.getFirstName(),user.getLastName(), GUIconstants.DEFAULT_PROFILE_PICTURE);
-        System.out.println(newUser.toString());
-
+        User newUser=new User(user.getUsername(),user.getEmail(),encodedPassword,user.getFirstName(),user.getLastName(), GUIconstants.DEFAULT_PROFILE_PICTURE,Provider.GITHUB);
+//        System.out.println(newUser.toString());
         userRepository.save(newUser);
         VerificationToken verificationToken = this.generateVerificationToken(newUser);
         emailService.sendVerificationEmail(user.getEmail(),MailSubjects.STANDARD_ACTIVATE_ACCOUNT_SUBJECT,verificationToken.getToken());
@@ -115,6 +117,15 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
+    }
+
+    @Override
+    public void processOAuth2User(OAuth2AuthenticationToken authenticationToken) {
+        OAuth2User oauth2User = authenticationToken.getPrincipal();
+        System.out.println(oauth2User.getAttributes());
+//        String email = oauth2User.getAttribute("email");
+//        String firstName = oauth2User.getAttribute("given_name");
+//        String lastName = oauth2User.getAttribute("family_name");
     }
 
 
