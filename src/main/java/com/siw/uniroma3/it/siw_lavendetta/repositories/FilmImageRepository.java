@@ -19,9 +19,5 @@ public interface FilmImageRepository extends JpaRepository<FilmImage,Long> {
 
     public List<FilmImage> findByFilmId(Long filmId);
 
-//    FilmImage findFirstByFilmOrderByCreatedAt(Film film);
-
-//    FilmImage findFirstByFilmOrderById(Film film);
-
     FilmImage findFirstByFilmOrderByIdAsc(Film film);
 }

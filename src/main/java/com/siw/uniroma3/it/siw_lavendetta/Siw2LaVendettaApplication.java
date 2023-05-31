@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 //@EnableJpaRepositories("com.siw.uniroma3.it.siw_lavendetta.repositories")
 @EntityScan("com.siw.uniroma3.it.siw_lavendetta.models")
-@ComponentScan(basePackages = "com.siw.uniroma3.it.siw_lavendetta")
+//@ComponentScan(basePackages = "com.siw.uniroma3.it.siw_lavendetta")
 @SpringBootApplication()
 
 public class Siw2LaVendettaApplication {

@@ -33,7 +33,7 @@ public class Review {
     @Column(name = "updatedOn", nullable = false)
     private LocalDateTime updatedOn;
 
-    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

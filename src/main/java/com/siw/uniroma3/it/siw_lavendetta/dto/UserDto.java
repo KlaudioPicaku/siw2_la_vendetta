@@ -94,4 +94,8 @@ public class UserDto {
     public String getConfirmPassword() {
         return  this.confirmPassword;
     }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
 }
