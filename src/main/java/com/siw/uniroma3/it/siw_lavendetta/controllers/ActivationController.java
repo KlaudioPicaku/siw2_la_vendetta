@@ -13,14 +13,8 @@ public class ActivationController {
     @Autowired
     VerificationTokenService verificationTokenService;
     @GetMapping("/activation/success")
-    public String showSuccessView(@RequestParam String token) {
-        VerificationToken verificationToken= verificationTokenService.findByToken(token);
-        if(verificationToken.isValid()) {
+    public String showSuccessView(@RequestParam("token") String token) {
             return "activation_success";
-        }
-        else{
-            return "activation_failed";
-        }
     }
 
     @GetMapping("/activation/failed")
