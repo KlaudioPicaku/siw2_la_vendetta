@@ -74,26 +74,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login?logout")
-                .permitAll()
-                .and()
-                .oauth2Login()
-                .loginPage("/login")
-                .defaultSuccessUrl("/oauth2/callback/code/github")
-                .userInfoEndpoint()
-                .userService(oauthUserService)
-                .and()
-                .successHandler(new AuthenticationSuccessHandler() {
-
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                                        Authentication authentication) throws IOException, ServletException
-                    {
-
-                        CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
-                        userService.processOAuthPostLogin(oauthUser.getEmail());
-                        response.sendRedirect("/list");
-                    }
-                });
+                .permitAll();
+//                .and()
+//                .oauth2Login()
+//                .loginPage("/login")
+//                .defaultSuccessUrl("/oauth2/callback/code/github")
+//                .userInfoEndpoint()
+//                .userService(oauthUserService)
+//                .and()
+//                .successHandler(new AuthenticationSuccessHandler() {
+//
+//                    @Override
+//                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+//                                                        Authentication authentication) throws IOException, ServletException
+//                    {
+//
+//                        CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
+//                        userService.processOAuthPostLogin(oauthUser.getEmail());
+//                        response.sendRedirect("/list");
+//                    }
+//                });
 
 //        http.csrf().ignoringAntMatchers("/api/reviews/create");
     }

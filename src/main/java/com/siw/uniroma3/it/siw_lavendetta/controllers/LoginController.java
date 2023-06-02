@@ -26,8 +26,8 @@ public class LoginController {
     @Autowired
     private UserServiceImpl userService;
 
-    @Autowired
-    OAuth2AuthorizedClientService clientService;
+//    @Autowired
+//    OAuth2AuthorizedClientService clientService;
 
 
     @GetMapping("/login")
