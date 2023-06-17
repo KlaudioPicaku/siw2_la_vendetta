@@ -25,17 +25,6 @@ public class FilmImageImpl implements FilmImageService {
     public List<FilmImage> findAll() {
         return filmImageRepository.findAll();
     }
-
-    @Override
-    public void saveOrUpdate(FilmImage filmImage) {
-        FilmImage previous= filmImageRepository.findByFilePathContaining(filmImage.getFilePath());
-        if (previous != null){
-            filmImageRepository.delete(previous);
-        }
-        filmImageRepository.save(filmImage) ;
-
-    }
-
     @Override
     public void delete(FilmImage filmImage) {
         String filePath="";
@@ -58,6 +47,16 @@ public class FilmImageImpl implements FilmImageService {
 
         filmImageRepository.delete(filmImage);
     }
+    @Override
+    public void saveOrUpdate(FilmImage filmImage) {
+        FilmImage previous= filmImageRepository.findByFilePathContaining(filmImage.getFilePath());
+        if (previous != null){
+            this.delete(previous);
+        }
+        filmImageRepository.save(filmImage) ;
+
+    }
+
 
     @Override
     public Optional<FilmImage> findById(Long Id) {
