@@ -16,9 +16,11 @@
     <th scope="col">Films they starred in:</th>
   </tr>
   <div class="d-flex justify-content-end">
-    <a href="/admin/actors/create" class="fadeIn btn btn-success">Add an Actor
-      <i class="material-icons">&#xe145;</i>
-    </a>
+    <div th:if="${#httpServletRequest.isUserInRole('ROLE_ADMIN')}">
+      <a href="/admin/actors/create" class="fadeIn btn btn-success">Add an Actor
+        <i class="material-icons">&#xe145;</i>
+      </a>
+    </div>
   </div>
   </thead>
   <tbody>
