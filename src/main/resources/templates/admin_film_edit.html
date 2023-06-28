@@ -26,15 +26,15 @@
           <option value=" "></option>
           <option th:each="actor : ${actors}" th:value="${actor.id}" th:text="${actor.fullName}"></option>
         </select>
-        <div class="form-group">
-          <div th:if="${film.getImages() != null}">
-            <div th:each="image : ${film.getImages()}">
-            <img class="mt-2" th:src="${image.getUrl()}" alt="Existing Image" width="50" height="50"/>
-            <input type="checkbox" th:id="'removeExistingImage'+'_'+${image.getId()}" name="removeExistingImage" th:value="${image.getId()}" />
-            <label th:for="'removeExistingImage'+'_'+${image.getId()}">Remove this Image?</label>
+          <div class="form-group">
+            <div th:if="${film.getImages() != null}">
+              <div th:each="image : ${film.getImages()}">
+              <img class="mt-2" th:src="${image.getUrl()}" alt="Existing Image" width="50" height="50"/>
+              <input type="checkbox" th:id="'removeExistingImage'+'_'+${image.getId()}" name="removeExistingImage" th:value="${image.getId()}" />
+              <label th:for="'removeExistingImage'+'_'+${image.getId()}">Remove this Image?</label>
+              </div>
             </div>
           </div>
-        </div>
         <label for="image" style="color:white">Images (the first one is the cover):</label>
         <input type="file" id="image" name="uploadedImages" class="form-control-file" accept="image/*" multiple />
         <div id="selected-images"></div>
