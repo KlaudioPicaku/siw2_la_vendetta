@@ -34,11 +34,6 @@ public class RegistrationController {
     @Autowired
     private UserDetailServiceImpl userDetailsService;
 
-    @ModelAttribute("user")
-    public UserDto userDto() {
-        return new UserDto();
-    }
-
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new UserDto());
