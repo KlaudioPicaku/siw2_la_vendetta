@@ -5,6 +5,7 @@ import com.siw.uniroma3.it.siw_lavendetta.impl.UserDetailServiceImpl;
 import com.siw.uniroma3.it.siw_lavendetta.impl.UserServiceImpl;
 import com.siw.uniroma3.it.siw_lavendetta.models.User;
 import com.siw.uniroma3.it.siw_lavendetta.services.UserService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,7 +46,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@Valid @ModelAttribute("userDto") UserDto user, BindingResult result) {
+    public String registerUser(@Valid @ModelAttribute("userDto") UserDto user, @NotNull BindingResult result) {
 //        System.out.println(user.toString());
         if (result.hasErrors()) {
             return "register";
